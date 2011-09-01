@@ -59,4 +59,17 @@ describe Badgeville do
       end
     end
   end
+
+  describe "#get_activities" do
+    before do
+      @url = /http:\/\/#{Badgeville::HOST}.*activities.json.*user=#{@user}.*/
+      stub_http_request(:get, @url).to_return(:body => {"data" => []}.to_json)
+
+      @activities = @badgeville.get_activities
+    end
+
+    it "should return an array of activities" do
+      @activities.class.should be(Array)
+    end
+  end
 end

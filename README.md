@@ -23,6 +23,12 @@ badgeville = Badgeville::Client.new(email, settings)
 badgeville.log_activity "commented"
 ```
 
+* get all logged activities
+
+```ruby
+badgeville.get_activities
+```
+
 Installing
 ----------
  1) add to your Gemfile

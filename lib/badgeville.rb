@@ -40,6 +40,14 @@ module Badgeville
       Activity.new(response)
     end
 
+    def get_activities
+      response = make_call(:get, :activities)
+      response["data"].inject([]) do |activities, activity_json|
+        activities<< Activity.new(activity_json)
+        activities
+      end
+    end
+
     private
 
     def valid_response?(obj)
@@ -58,11 +66,16 @@ module Badgeville
       @session
     end
 
-    def make_call(method, action, params)
+    def make_call(method, action, params={})
       end_point = "#{action.to_s}.json"
       params.merge!(:user => @user, :site => @site)
       begin
-        response = session[end_point].send(method, to_query(params))
+        case method
+        when :get
+          response = session[end_point].send(method, :params => params)
+        when :post, :put, :delete
+          response = session[end_point].send(method, to_query(params))
+        end
         data = response.body
         json = JSON.parse(data)
       rescue => e
