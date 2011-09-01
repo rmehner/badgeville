@@ -14,6 +14,11 @@ module Badgeville
       @rewards = json.delete("rewards").inject([]) do |rewards, award|
         rewards << Reward.new(award["definition"])
       end
+      @meta = json.inject({}) do |meta, entry|
+        k,v = entry
+        meta[k.to_sym] = v
+        meta
+      end
     end
   end
 end

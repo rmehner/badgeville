@@ -31,6 +31,11 @@ module Badgeville
       params = {
         "activity[verb]" => activity,
       }
+      opts.inject(params) do |params, entry|
+        k, v = entry
+        params["activity[#{k.to_s}]"] = v
+        params
+      end
       response = make_call(:post, :activities, params)
       Activity.new(response)
     end
