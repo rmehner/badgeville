@@ -63,13 +63,36 @@ describe Badgeville do
   describe "#get_activities" do
     before do
       @url = /http:\/\/#{Badgeville::HOST}.*activities.json.*user=#{@user}.*/
-      stub_http_request(:get, @url).to_return(:body => {"data" => []}.to_json)
-
+      mock_activities = { 
+        "data" => [
+                   {
+                     "verb" => "join_team",
+                     "created_at" => "2011-09-01T14:12:13-07:00",
+                     "rewards" => []
+                   }
+                  ]
+      }
+      stub_http_request(:get, @url).to_return(:body => mock_activities.to_json)
       @activities = @badgeville.get_activities
     end
 
     it "should return an array of activities" do
       @activities.class.should be(Array)
+      @activities.first.class.should be(Badgeville::Activity)
+    end
+  end
+
+  describe "#reward_definitions" do
+    before do
+      @url = /http:\/\/#{Badgeville::HOST}.*reward_definitions.json.*user=#{@user}.*/
+      mock_rewards = {"data" => [{"name" => "Big Bang"}]}
+      stub_http_request(:get, @url).to_return(:body => mock_rewards.to_json)
+      @rewards = @badgeville.reward_definitions
+    end
+
+    it "should return an array of rewards" do
+      @rewards.class.should be(Array)
+      @rewards.first.class.should be(Badgeville::Reward)
     end
   end
 end

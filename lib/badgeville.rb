@@ -1,6 +1,7 @@
 require 'json'
 require 'rest_client'
 require 'badgeville/activity'
+require 'badgeville/reward'
 
 module Badgeville
   TIMEOUT = 1000
@@ -45,6 +46,14 @@ module Badgeville
       response["data"].inject([]) do |activities, activity_json|
         activities<< Activity.new(activity_json)
         activities
+      end
+    end
+
+    def reward_definitions
+      response = make_call(:get, :reward_definitions)
+      response["data"].inject([]) do |rewards, reward_json|
+        rewards<< Reward.new(reward_json)
+        rewards
       end
     end
 

@@ -29,6 +29,12 @@ badgeville.log_activity "commented"
 badgeville.get_activities
 ```
 
+* get list of reward definitions
+
+```ruby
+badgeville.reward_definitions
+```
+
 Installing
 ----------
  1) add to your Gemfile
