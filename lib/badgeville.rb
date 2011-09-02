@@ -57,6 +57,14 @@ module Badgeville
       end
     end
 
+    def get_rewards
+      response = make_call(:get, :rewards)
+      response["data"].inject([]) do |rewards, reward_json|
+        rewards<< Reward.new(reward_json)
+        rewards
+      end
+    end
+
     private
 
     def valid_response?(obj)

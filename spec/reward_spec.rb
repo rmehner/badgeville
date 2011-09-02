@@ -3,7 +3,7 @@ require 'json'
 
 describe Badgeville::Reward do
   before do
-    @json = JSON.parse('{
+    @parsed_json = JSON.parse('{
     "name": "A Way with Words",
     "active_start_at": null,
     "image_file_name": "9fQ2IU6-0.ftbs4fsoogp3c8fr.png",
@@ -28,16 +28,37 @@ describe Badgeville::Reward do
     "site_id": "4e4d5bf5c47eed25a0000e8f",
     "active": true
    }')
-    @reward = Badgeville::Reward.new(@json)
   end
 
-  it "initialize based on json" do
-    @reward.name.should == "A Way with Words"
-    @reward.image_url.should =~ /original.png/
-    @reward.active.should be_true
+  context "when json is a reward definition" do
+    before do
+      @reward = Badgeville::Reward.new(@parsed_json)
+    end
+
+    it "initialize based on json" do
+      @reward.name.should == "A Way with Words"
+      @reward.image_url.should =~ /original.png/
+      @reward.active.should be_true
+    end
+
+    it "has an grayscale image" do
+      @reward.grayscale_url.should == @reward.image_url.sub('original','grayscale')
+    end
   end
 
-  it "has an grayscale image" do
-    @reward.grayscale_url.should == @reward.image_url.sub('original','grayscale')
+  context "when json is a reward earned by user" do
+    before do
+      @parsed_json = {"user_id" => "1", 
+        "created_at" => "2011-08-18T22:55:03-07:00",
+        "definition" => @parsed_json}
+      @reward = Badgeville::Reward.new(@parsed_json)
+    end
+
+    it "initialize based on json" do
+      @reward.name.should == "A Way with Words"
+      @reward.image_url.should =~ /original.png/
+      @reward.active.should be_true
+      @reward.earned_at.iso8601.should == @parsed_json["created_at"]
+    end
   end
 end

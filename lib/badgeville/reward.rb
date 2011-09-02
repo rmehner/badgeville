@@ -1,6 +1,6 @@
 module Badgeville
   class Reward
-    attr_accessor :name, :hint, :image_url, :active
+    attr_accessor :name, :hint, :image_url, :active, :earned_at
 
 #  example: 
 #  {
@@ -29,14 +29,24 @@ module Badgeville
 #    "active": true
 #   }
     def initialize(json)
-      @name = json["name"]
-      @active = json["active"]
-      @hint = json["hint"]
-      @image_url = json["image_url"]
+      reward_definition = json["definition"]
+      reward_definition ? init_from(reward_definition) : init_from(json)
+      if json.has_key?('user_id') # it's an earned reward for a specific user
+        @earned_at = DateTime.parse(json["created_at"]).to_time
+      end
     end
 
     def grayscale_url
       @image_url.sub('original.png', 'grayscale.png')
+    end
+
+    private
+
+    def init_from(json)
+      @name = json["name"]
+      @active = json["active"]
+      @hint = json["hint"]
+      @image_url = json["image_url"]
     end
   end
 end
