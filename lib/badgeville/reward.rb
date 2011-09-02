@@ -1,7 +1,6 @@
 module Badgeville
   class Reward
     attr_accessor :name, :hint, :image_url, :active
-  end
 
 #  example: 
 #  {
@@ -13,7 +12,7 @@ module Badgeville
 #      "threshold": 2
 #    },
 #    "created_at": "2011-08-18T22:55:03-07:00",
-#    "image_url": "http://s3.amazonaws.com/badgeville-production-reward-definitions/images/4e4dfab6c47eed727b005c38/original.png?1313733302",
+#    "image_url": "http://s3.amazonaws.com/badgeville-production-reward-definitions/images/original.png?1313733302",
 #    "components": "[{\"command\":\"count\",\"comparator\":{\"$gte\":2},\"config\":{},\"where\":{\"verb\":\"commented\",\"player_id\":\"%player_id\"}}]",
 #    "reward_template": {
 #      "message": ""
@@ -29,10 +28,15 @@ module Badgeville
 #    "site_id": "4e4d5bf5c47eed25a0000e8f",
 #    "active": true
 #   }
-  def initialize(json)
-    @name = json["name"]
-    @active = json["active"]
-    @hint = json["hint"]
-    @image_url = json["image_url"]
+    def initialize(json)
+      @name = json["name"]
+      @active = json["active"]
+      @hint = json["hint"]
+      @image_url = json["image_url"]
+    end
+
+    def grayscale_url
+      @image_url.sub('original.png', 'grayscale.png')
+    end
   end
 end
