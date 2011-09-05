@@ -28,11 +28,13 @@ module Badgeville
 #    "site_id": "4e4d5bf5c47eed25a0000e8f",
 #    "active": true
 #   }
-    def initialize(json)
-      reward_definition = json["definition"]
-      reward_definition ? init_from(reward_definition) : init_from(json)
-      if json.has_key?('user_id') # it's an earned reward for a specific user
-        @earned_at = DateTime.parse(json["created_at"]).to_time
+    def initialize(json=nil)
+      if json
+        reward_definition = json["definition"]
+        reward_definition ? init_from(reward_definition) : init_from(json)
+        if json.has_key?('user_id') # it's an earned reward for a specific user
+          @earned_at = DateTime.parse(json["created_at"]).to_time
+        end
       end
     end
 
