@@ -36,6 +36,7 @@ badgeville.reward_definitions
 ```
 
 * manually award some reward
+
 ```ruby
 badgeville.award "Best User"
 ```
