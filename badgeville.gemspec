@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{badgeville}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Gilad Buchman"]
-  s.date = %q{2011-08-30}
+  s.date = %q{2011-09-06}
   s.description = %q{Client for Badgeville's Core API v2. http://rules.badgeville.com}
   s.extra_rdoc_files = [
     "README.md"
@@ -21,12 +21,14 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "badgeville.gemspec",
     "examples/log_and_check_status.rb",
     "keys.json.example",
     "lib/badgeville.rb",
     "lib/badgeville/activity.rb",
     "lib/badgeville/reward.rb",
     "spec/badgeville_spec.rb",
+    "spec/reward_spec.rb",
     "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/Keasinc/badgeville}
