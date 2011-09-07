@@ -17,6 +17,7 @@ module Badgeville
   end
 
   class Client
+    attr_accessor :user, :site, :player_id, :site_id
 
     def initialize (email, opts={})
       # Required Parameters
@@ -50,11 +51,15 @@ module Badgeville
     end
 
     def reward_definitions
-      response = make_call(:get, :reward_definitions)
-      response["data"].inject([]) do |rewards, reward_json|
-        rewards<< Reward.new(reward_json)
-        rewards
+      unless @reward_definitions
+        response = make_call(:get, :reward_definitions)
+        @reward_definitions = response["data"].inject([]) do
+          |rewards, reward_json|
+          rewards<< Reward.new(reward_json)
+          rewards
+        end
       end
+      @reward_definitions
     end
 
     def get_rewards
@@ -63,6 +68,51 @@ module Badgeville
         rewards<< Reward.new(reward_json)
         rewards
       end
+    end
+
+    def award reward_name
+      reward = reward_definitions.select do |reward|
+        reward.name == reward_name
+      end.first
+      params = {
+        'reward[player_id]' => player_id,
+        'reward[site_id]' => site_id,
+        'reward[definition_id]' => reward.id,
+      }
+      make_call(:post, :rewards, params)
+    end
+
+    def set_player
+      end_point = "#{@site}/players/#{@user}.json"
+      begin
+        response = session[end_point].get
+        data = response.body
+        json = JSON.parse(data)
+        json = json["data"]
+        @player_id = json["id"]
+        @site_id = json["site_id"]
+      rescue => e
+        if e.respond_to? :response
+          data = JSON.parse(e.response)
+          raise BadgevilleError.new(e.code, data["error"])
+        else
+          raise e
+        end
+      end
+    end
+
+    def site_id
+      unless @site_id
+        set_player
+      end
+      @site_id
+    end
+
+    def player_id
+      unless @player_id
+        set_player
+      end
+      @player_id
     end
 
     private
@@ -85,7 +135,9 @@ module Badgeville
 
     def make_call(method, action, params={})
       end_point = "#{action.to_s}.json"
-      params.merge!(:user => @user, :site => @site)
+      unless params.keys.any? { |k| k =~ /player_id/ }
+        params.merge!(:user => @user, :site => @site)
+      end
       begin
         case method
         when :get

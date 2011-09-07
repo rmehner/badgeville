@@ -39,6 +39,7 @@ describe Badgeville::Reward do
       @reward.name.should == "A Way with Words"
       @reward.image_url.should =~ /original.png/
       @reward.active.should be_true
+      @reward.id.should == "4e4dfab6c47eed727b005c38"
     end
 
     it "has an grayscale image" do
@@ -59,6 +60,7 @@ describe Badgeville::Reward do
       @reward.image_url.should =~ /original.png/
       @reward.active.should be_true
       @reward.earned_at.iso8601.should == @parsed_json["created_at"]
+      @reward.id.should == "4e4dfab6c47eed727b005c38"
     end
   end
 end

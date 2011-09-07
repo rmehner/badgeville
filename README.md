@@ -35,6 +35,11 @@ badgeville.get_activities
 badgeville.reward_definitions
 ```
 
+* manually award some reward
+```ruby
+badgeville.award "Best User"
+```
+
 Installing
 ----------
  1) add to your Gemfile

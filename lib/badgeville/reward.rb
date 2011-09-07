@@ -1,6 +1,6 @@
 module Badgeville
   class Reward
-    attr_accessor :name, :hint, :image_url, :active, :earned_at
+    attr_accessor :name, :hint, :image_url, :active, :earned_at, :id
 
 #  example: 
 #  {
@@ -49,6 +49,7 @@ module Badgeville
       @active = json["active"]
       @hint = json["hint"]
       @image_url = json["image_url"]
+      @id = json["_id"]
     end
   end
 end

@@ -14,3 +14,5 @@ pp badgeville.log_activity "join_team", :team => "myteam"
 
 pp badgeville.get_activities
 pp badgeville.get_rewards #earned for user
+
+badgeville.award "Best User Ever"

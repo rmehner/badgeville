@@ -95,4 +95,14 @@ describe Badgeville do
       @rewards.first.class.should be(Badgeville::Reward)
     end
   end
+
+  describe "#set_player" do
+    before do
+      @url = /http:\/\/#{Badgeville::HOST}.*example.com\/players\/#{@user}\.json.*/
+      stub_http_request(:get, @url).to_return(:body => {"data" => {"id" => "1", "site_id" => "site"}}.to_json)
+    end
+
+    it {@badgeville.player_id.should == "1"}
+    it {@badgeville.site_id.should == "site"}
+  end
 end
