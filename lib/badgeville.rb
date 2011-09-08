@@ -94,7 +94,7 @@ module Badgeville
       rescue => e
         if e.respond_to? :response
           data = JSON.parse(e.response)
-          raise BadgevilleError.new(e.code, data["error"])
+          raise BadgevilleError.new(e.http_code, data["error"])
         else
           raise e
         end
