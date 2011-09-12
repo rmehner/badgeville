@@ -148,8 +148,12 @@ module Badgeville
         json = JSON.parse(data)
       rescue => e
         if e.respond_to? :response
-          data = JSON.parse(e.response)
-          raise BadgevilleError.new(e.code, data["error"])
+          begin
+            data = JSON.parse(e.response)
+            raise BadgevilleError.new(e.code, data["error"])
+          rescue TypeError
+            raise e
+          end
         else
           raise e
         end
