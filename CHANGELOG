@@ -1,0 +1,5 @@
+* 0.0.3
+
+* Activity.rewards includes reward objects not reward definitions
+* Reward has verb and threshold data for achievments type rewards
+* Raise non json errors
