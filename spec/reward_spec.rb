@@ -63,4 +63,15 @@ describe Badgeville::Reward do
       @reward.id.should == "4e4dfab6c47eed727b005c38"
     end
   end
+
+  context "when reward is an achievement (has data with verb and threshold)" do
+    before do
+      @reward = Badgeville::Reward.new(@parsed_json)
+    end
+
+    it "has verb adn threshold accessors" do
+      @reward.verb.should == "commented"
+      @reward.threshold.should == 2
+    end
+  end
 end

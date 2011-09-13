@@ -1,6 +1,7 @@
 module Badgeville
   class Reward
     attr_accessor :name, :hint, :image_url, :active, :earned_at, :id
+    attr_accessor :verb, :threshold
 
 #  example: 
 #  {
@@ -50,6 +51,10 @@ module Badgeville
       @hint = json["hint"]
       @image_url = json["image_url"]
       @id = json["_id"]
+      if json["data"] && json["type"] == "achievement"
+        @verb = json["data"]["verb"]
+        @threshold = json["data"]["threshold"].to_i
+      end
     end
   end
 end
