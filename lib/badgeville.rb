@@ -42,8 +42,8 @@ module Badgeville
       Activity.new(response)
     end
 
-    def get_activities
-      response = make_call(:get, :activities)
+    def get_activities(opts={})
+      response = make_call(:get, :activities, opts)
       response["data"].map do |activity_json|
         Activity.new(activity_json)
       end
