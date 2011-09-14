@@ -57,10 +57,9 @@ module Badgeville
     def reward_definitions
       unless @reward_definitions
         response = make_call(:get, :reward_definitions)
-        @reward_definitions = response["data"].inject([]) do
+        @reward_definitions = response["data"].map do
           |rewards, reward_json|
-          rewards<< Reward.new(reward_json)
-          rewards
+          Reward.new(reward_json)
         end
       end
       @reward_definitions
@@ -159,9 +158,9 @@ module Badgeville
         if e.respond_to? :response
           begin
             data = JSON.parse(e.response)
-            raise BadgevilleError.new(e.code, data["error"])
+            raise BadgevilleError.new(e.http_code, data["error"])
           rescue TypeError
-            raise BadgevilleError.new(e.code, data)
+            raise BadgevilleError.new(e.http_code, data)
           end
         else
           raise e
