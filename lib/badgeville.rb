@@ -49,6 +49,11 @@ module Badgeville
       end
     end
 
+    def count_activities(opts={})
+      response = make_call(:get, :activities, opts)
+      response["paging"]["total_entries"].to_i
+    end
+
     def reward_definitions
       unless @reward_definitions
         response = make_call(:get, :reward_definitions)

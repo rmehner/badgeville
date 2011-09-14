@@ -12,7 +12,12 @@ pp badgeville.log_activity "commented"
 
 pp badgeville.log_activity "join_team", :team => "myteam"
 
+#check histoy for user
 pp badgeville.get_activities
+pp badgeville.count_activities
+pp badgeville.count_activities :verb => "commented"
+pp badgeville.count_activities :verb => "junk"
+
 pp badgeville.get_rewards #earned for user
 
 badgeville.award "Best User Ever"
