@@ -83,7 +83,7 @@ module Badgeville
         'reward[site_id]' => site_id,
         'reward[definition_id]' => reward.id,
       }
-      make_call(:post, :rewards, params)
+      Reward.new(make_call(:post, :rewards, params))
     end
 
     def set_player
