@@ -67,10 +67,14 @@ module Badgeville
     end
 
     def get_rewards
-      response = make_call(:get, :rewards)
-      response["data"].inject([]) do |rewards, reward_json|
-        rewards<< Reward.new(reward_json)
-        rewards
+      begin
+        response = make_call(:get, :rewards)
+        response["data"].map do |reward_json|
+          Reward.new(reward_json)
+        end
+      rescue BadgevilleError => e
+        raise e unless e.code == 404
+        []
       end
     end
 
@@ -157,7 +161,7 @@ module Badgeville
             data = JSON.parse(e.response)
             raise BadgevilleError.new(e.code, data["error"])
           rescue TypeError
-            raise e
+            raise BadgevilleError.new(e.code, data)
           end
         else
           raise e
