@@ -57,8 +57,7 @@ module Badgeville
     def reward_definitions
       unless @reward_definitions
         response = make_call(:get, :reward_definitions)
-        @reward_definitions = response["data"].map do
-          |rewards, reward_json|
+        @reward_definitions = response["data"].map do |reward_json|
           Reward.new(reward_json)
         end
       end
