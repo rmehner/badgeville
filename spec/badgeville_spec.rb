@@ -119,6 +119,7 @@ describe Badgeville do
     it "should return an array of rewards" do
       @rewards.class.should be(Array)
       @rewards.first.class.should be(Badgeville::Reward)
+      @rewards.first.name.should == "Big Bang"
     end
   end
 
