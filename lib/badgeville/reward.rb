@@ -1,7 +1,9 @@
+
 module Badgeville
   class Reward
+    include Badgeville::Helpers
     attr_accessor :name, :hint, :image_url, :active, :earned_at, :id
-    attr_accessor :verb, :threshold
+    attr_accessor :verb, :threshold, :tags
 
 #  example: 
 #  {
@@ -54,6 +56,10 @@ module Badgeville
       if json["data"] && json["type"] == "achievement"
         @verb = json["data"]["verb"]
         @threshold = json["data"]["threshold"].to_i
+      end
+      @tags = []
+      if json["tags"]
+        @tags = json["tags"].split(',').map(&:strip)
       end
     end
   end

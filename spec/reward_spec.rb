@@ -40,10 +40,29 @@ describe Badgeville::Reward do
       @reward.image_url.should =~ /original.png/
       @reward.active.should be_true
       @reward.id.should == "4e4dfab6c47eed727b005c38"
+      @reward.tags.should == []
     end
 
     it "has an grayscale image" do
       @reward.grayscale_url.should == @reward.image_url.sub('original','grayscale')
+    end
+
+    context "has one tag" do
+      before do
+        @parsed_json["tags"] = "tag"
+        @reward = Badgeville::Reward.new(@parsed_json)
+      end
+
+      it {@reward.tags.should == ["tag"]}
+    end
+
+    context "has multiple tags" do
+      before do
+        @parsed_json["tags"] = "tag1, tag2"
+        @reward = Badgeville::Reward.new(@parsed_json)
+      end
+
+      it {@reward.tags.should == ["tag1", "tag2"]}
     end
   end
 

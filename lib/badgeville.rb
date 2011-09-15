@@ -1,5 +1,6 @@
 require 'json'
 require 'rest_client'
+require 'badgeville/helpers'
 require 'badgeville/activity'
 require 'badgeville/reward'
 
@@ -125,10 +126,6 @@ module Badgeville
 
     def valid_response?(obj)
       obj.is_a?(Array) || obj.is_a?(Hash)
-    end
-
-    def ensure_array(items)
-      items.is_a?(Array) ? items : [items]
     end
 
     def session
