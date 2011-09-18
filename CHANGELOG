@@ -1,3 +1,10 @@
+* 0.0.4
+
+* count activities
+* better error handling
+* add tags to rewards
+
+
 * 0.0.3
 
 * Activity.rewards includes reward objects not reward definitions
