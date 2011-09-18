@@ -12,7 +12,8 @@ module Badgeville
   class BadgevilleError < StandardError
     attr_accessor :code
 
-    def initialize (err_code=nil)
+    def initialize (err_code=nil, error_msg="")
+      super error_msg
       @code = err_code
     end
   end
