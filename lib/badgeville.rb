@@ -18,7 +18,7 @@ module Badgeville
     end
 
     def to_s
-      "#{self.class} : code #{err_code} : #{error_msg}"
+      "#{self.class} : code #{@code} : #{self.message}"
     end
   end
 
