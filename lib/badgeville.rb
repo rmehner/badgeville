@@ -16,6 +16,10 @@ module Badgeville
       super error_msg
       @code = err_code
     end
+
+    def to_s
+      "#{self.class} : code #{err_code} : #{error_msg}"
+    end
   end
 
   class Client
