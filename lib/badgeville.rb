@@ -14,11 +14,12 @@ module Badgeville
 
     def initialize (err_code=nil, error_msg="")
       super error_msg
+      @message = error_msg
       @code = err_code
     end
 
     def to_s
-      "#{self.class} : code #{@code} : #{self.message}"
+      "ERROR #{@code} : #{@message}"
     end
   end
 
