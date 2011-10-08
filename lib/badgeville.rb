@@ -5,7 +5,7 @@ require 'badgeville/activity'
 require 'badgeville/reward'
 
 module Badgeville
-  TIMEOUT = 1000
+  TIMEOUT_SECS = 3
   HOST = "sandbox.v2.badgeville.com"
   PROTOCOL = "http"
 
@@ -24,13 +24,14 @@ module Badgeville
   end
 
   class Client
-    attr_accessor :user, :site, :player_id, :site_id
+    attr_accessor :user, :site, :player_id, :site_id, :timeout
 
     def initialize (email, opts={})
       # Required Parameters
       @site = opts['site']
       @private_key = opts['private_key']
       @public_key = opts['public_key']
+      @timeout = opts['timeout'] || TIMEOUT_SECS
       @host = opts['host'] || HOST
       @protocol = opts['protocol'] || PROTOCOL
       @user = email
@@ -114,6 +115,10 @@ module Badgeville
       end
     end
 
+    def timeout
+      @timeout
+    end
+
     def site_id
       unless @site_id
         set_player
@@ -137,7 +142,7 @@ module Badgeville
     def session
       if @session.nil?
         base_url = "#{@protocol}://#{@host}/api/berlin/#{@private_key}"
-        @session = RestClient::Resource.new base_url
+        @session = RestClient::Resource.new base_url, :timeout => @timeout
       end
       @session
     end

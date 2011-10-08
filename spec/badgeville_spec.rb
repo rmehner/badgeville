@@ -63,7 +63,7 @@ describe Badgeville do
   describe "#get_activities" do
     before do
       @url = /http:\/\/#{Badgeville::HOST}.*activities.json.*user=#{@user}.*/
-      mock_activities = { 
+      mock_activities = {
         "data" => [
                    {
                      "verb" => "join_team",
@@ -132,4 +132,15 @@ describe Badgeville do
     it {@badgeville.player_id.should == "1"}
     it {@badgeville.site_id.should == "site"}
   end
+
+  describe "verify default timeout is 3" do
+    it {@badgeville.timeout.should == 3}
+  end
+
+  describe "verify timeout parameter is set" do
+    new_badgeville = Badgeville::Client.new @user, 'private_key' => "api_key",
+      'site' => 'example.com', 'timeout' => 10
+    it {new_badgeville.timeout.should == 10}
+  end
+
 end
