@@ -1,3 +1,8 @@
+* 0.0.5
+
+* set default timeout to 3s
+* add timeout paramater
+
 * 0.0.4
 
 * count activities
