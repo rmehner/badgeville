@@ -97,9 +97,10 @@ module Badgeville
     end
 
     def set_player
-      end_point = "#{@site}/players/#{@user}.json"
+      end_point = "#{@site}/players/info.json"
       begin
-        response = session[end_point].get
+        response = session[end_point].get(:params =>
+                                          {:user => @user, :site => @site})
         data = response.body
         json = JSON.parse(data)
         json = json["data"]

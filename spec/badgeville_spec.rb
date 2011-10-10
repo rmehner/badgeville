@@ -125,7 +125,7 @@ describe Badgeville do
 
   describe "#set_player" do
     before do
-      @url = /http:\/\/#{Badgeville::HOST}.*example.com\/players\/#{@user}\.json.*/
+      @url = /http:\/\/#{Badgeville::HOST}.*example.com\/players\/info\.json.*user=#{@user}.*/
       stub_http_request(:get, @url).to_return(:body => {"data" => {"id" => "1", "site_id" => "site"}}.to_json)
     end
 
