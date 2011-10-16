@@ -68,7 +68,7 @@ describe Badgeville::Reward do
 
   context "when json is a reward earned by user" do
     before do
-      @parsed_json = {"user_id" => "1", 
+      @parsed_json = {"user_id" => "1", "id" => "new_id",
         "created_at" => "2011-08-18T22:55:03-07:00",
         "definition" => @parsed_json}
       @reward = Badgeville::Reward.new(@parsed_json)
@@ -79,7 +79,7 @@ describe Badgeville::Reward do
       @reward.image_url.should =~ /original.png/
       @reward.active.should be_true
       @reward.earned_at.iso8601.should == @parsed_json["created_at"]
-      @reward.id.should == "4e4dfab6c47eed727b005c38"
+      @reward.id.should == "new_id"
     end
   end
 
