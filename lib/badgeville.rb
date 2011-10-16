@@ -96,6 +96,19 @@ module Badgeville
       Reward.new(make_call(:post, :rewards, params))
     end
 
+    def delete reward
+      if reward.respond_to?(:earned_at) && reward.earned_at
+        end_point = "rewards/#{reward.id}.json"
+        begin
+          !!session[end_point].delete
+        rescue => e
+          raise BadgevilleError.new(e.http_code, e.message)
+        end
+      else
+        raise BadgevilleError.new(nil, "can only remove earned rewards. a #{reward.to_json} was given")
+      end
+    end
+
     def set_player
       end_point = "/players/info.json"
       begin
