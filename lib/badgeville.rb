@@ -129,10 +129,6 @@ module Badgeville
       end
     end
 
-    def timeout
-      @timeout
-    end
-
     def site_id
       unless @site_id
         set_player
@@ -156,7 +152,8 @@ module Badgeville
     def session
       if @session.nil?
         base_url = "#{@protocol}://#{@host}/api/berlin/#{@private_key}"
-        @session = RestClient::Resource.new base_url, :timeout => @timeout
+        @session = RestClient::Resource.new base_url,
+          :timeout => @timeout, :open_timeout => @timeout
       end
       @session
     end
