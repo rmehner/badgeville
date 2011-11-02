@@ -10,16 +10,16 @@ module Badgeville
   PROTOCOL = "http"
 
   class BadgevilleError < StandardError
-    attr_accessor :code
+    attr_accessor :code, :data
 
-    def initialize (err_code=nil, error_msg="")
-      super error_msg
-      @message = error_msg
+    def initialize (err_code=nil, error_data="")
+      super error_data.to_s
+      @data = error_data
       @code = err_code
     end
 
     def to_s
-      "ERROR #{@code} : #{@message}"
+      "ERROR #{@code} : #{@data}"
     end
   end
 
@@ -176,9 +176,13 @@ module Badgeville
         if e.respond_to? :response
           begin
             data = JSON.parse(e.response)
+            data.merge!(:params => params,
+                        :end_point => end_point,
+                        :method => method)
             raise BadgevilleError.new(e.http_code, data)
           rescue TypeError, JSON::ParserError
-            raise BadgevilleError.new(e.http_code, e.message)
+            msg = "#{e.message} on #{method} #{end_point}: #{params}"
+            raise BadgevilleError.new(e.http_code, msg)
           end
         else
           raise e

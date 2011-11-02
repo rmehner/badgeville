@@ -20,4 +20,4 @@ pp badgeville.count_activities :verb => "junk"
 
 pp badgeville.get_rewards #earned for user
 
-badgeville.award "Best User Ever"
+badgeville.award "The First Step"
