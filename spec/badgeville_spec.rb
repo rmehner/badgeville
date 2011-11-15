@@ -36,7 +36,7 @@ describe Badgeville do
 
       it "parses response from activity record api call" do
         @activity.verb.should == "commented"
-        @activity.created_at.iso8601.should == @result["created_at"]
+        @activity.created_at.iso8601.should == Time.parse(@result["created_at"]).iso8601
         @activity.points.should == 0
         @activity.rewards.should be_empty
         @activity.meta.should be_empty
