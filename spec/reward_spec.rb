@@ -17,7 +17,7 @@ describe Badgeville::Reward do
     "reward_template": {
       "message": ""
     },
-      "_id": "4e4dfab6c47eed727b005c38",
+    "_id": "4e4dfab6c47eed727b005c38",
     "tags": null,
     "id": "4e4dfab6c47eed727b005c38",
     "active_end_at": null,
@@ -41,6 +41,7 @@ describe Badgeville::Reward do
       @reward.active.should be_true
       @reward.id.should == "4e4dfab6c47eed727b005c38"
       @reward.tags.should == []
+      @reward.reward_type_id.should == '4e4dfab6c47eed727b005c38'
     end
 
     it "has an grayscale image" do
@@ -80,6 +81,7 @@ describe Badgeville::Reward do
       @reward.active.should be_true
       @reward.earned_at.iso8601.should == @parsed_json["created_at"]
       @reward.id.should == "new_id"
+      @reward.reward_type_id.should == '4e4dfab6c47eed727b005c38'
     end
   end
 
@@ -88,7 +90,7 @@ describe Badgeville::Reward do
       @reward = Badgeville::Reward.new(@parsed_json)
     end
 
-    it "has verb adn threshold accessors" do
+    it "has verb and threshold accessors" do
       @reward.verb.should == "commented"
       @reward.threshold.should == 2
     end
