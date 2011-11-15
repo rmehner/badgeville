@@ -79,7 +79,7 @@ describe Badgeville::Reward do
       @reward.name.should == "A Way with Words"
       @reward.image_url.should =~ /original.png/
       @reward.active.should be_true
-      @reward.earned_at.iso8601.should == @parsed_json["created_at"]
+      @reward.earned_at.iso8601.should == Time.parse(@parsed_json["created_at"]).iso8601
       @reward.id.should == "new_id"
       @reward.reward_type_id.should == '4e4dfab6c47eed727b005c38'
     end
