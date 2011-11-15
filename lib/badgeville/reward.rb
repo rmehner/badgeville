@@ -3,7 +3,7 @@ module Badgeville
   class Reward
     include Badgeville::Helpers
     attr_accessor :name, :hint, :image_url, :active, :earned_at, :id
-    attr_accessor :verb, :threshold, :tags
+    attr_accessor :verb, :threshold, :tags, :reward_type_id
 
 #  example: 
 #  {
@@ -53,7 +53,7 @@ module Badgeville
       @active = json["active"]
       @hint = json["hint"]
       @image_url = json["image_url"]
-      @id = json["_id"]
+      @id = @reward_type_id = json["_id"]
       if json["data"] && json["type"] == "achievement"
         @verb = json["data"]["verb"]
         @threshold = json["data"]["threshold"].to_i
