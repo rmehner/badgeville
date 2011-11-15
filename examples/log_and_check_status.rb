@@ -20,4 +20,6 @@ pp badgeville.count_activities :verb => "junk"
 
 pp badgeville.get_rewards #earned for user
 
-badgeville.award "The First Step"
+#award and delete rewards
+reward = badgeville.award "The First Step"
+badgeville.delete reward

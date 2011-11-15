@@ -41,7 +41,7 @@ describe Badgeville::Reward do
       @reward.active.should be_true
       @reward.id.should == "4e4dfab6c47eed727b005c38"
       @reward.tags.should == []
-      @reward.reward_type_id.should == '4e4dfab6c47eed727b005c38'
+      @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
     end
 
     it "has an grayscale image" do
@@ -81,7 +81,7 @@ describe Badgeville::Reward do
       @reward.active.should be_true
       @reward.earned_at.iso8601.should == Time.parse(@parsed_json["created_at"]).iso8601
       @reward.id.should == "new_id"
-      @reward.reward_type_id.should == '4e4dfab6c47eed727b005c38'
+      @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
     end
   end
 

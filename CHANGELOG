@@ -2,7 +2,7 @@
 
 * change set player to use new players/info end point
 * add delete method for earned rewards
-
+* add definition_id to reward
 
 * 0.0.5
 
