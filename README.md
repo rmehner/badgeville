@@ -1,4 +1,4 @@
-Nitro API
+Badgeville API
 ============
 
 Client for Badgeville API http://rules.badgeville.com/
