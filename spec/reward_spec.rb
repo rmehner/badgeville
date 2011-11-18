@@ -12,7 +12,7 @@ describe Badgeville::Reward do
       "threshold": 2
     },
     "created_at": "2011-08-18T22:55:03-07:00",
-    "image_url": "http://s3.amazonaws.com/badgeville-production-reward-definitions/images/someid/original.png?1313733302",
+    "image_url": "http://s3.amazon.com/original.png?1",
     "components": "[{\"command\":\"count\",\"comparator\":{\"$gte\":2},\"config\":{},\"where\":{\"verb\":\"commented\",\"player_id\":\"%player_id\"}}]",
     "reward_template": {
       "message": ""
@@ -37,15 +37,22 @@ describe Badgeville::Reward do
 
     it "initialize based on json" do
       @reward.name.should == "A Way with Words"
-      @reward.image_url.should =~ /original.png/
       @reward.active.should be_true
       @reward.id.should == "4e4dfab6c47eed727b005c38"
       @reward.tags.should == []
       @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
     end
 
-    it "has an grayscale image" do
-      @reward.grayscale_url.should == @reward.image_url.sub('original','grayscale')
+    describe "image_url" do
+      it "returns the original url by default" do
+        @reward.image_url.should == 'http://s3.amazon.com/original.png?1'
+      end
+
+      it "allows to request specific formats" do
+        ['original', 'large', 'medium', 'grayscale', 'grayscale_small'].each do |format|
+          @reward.image_url(format).should == "http://s3.amazon.com/#{format}.png?1"
+        end
+      end
     end
 
     context "has one tag" do

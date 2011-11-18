@@ -2,7 +2,7 @@
 module Badgeville
   class Reward
     include Badgeville::Helpers
-    attr_accessor :name, :hint, :image_url, :active, :earned_at, :id
+    attr_accessor :name, :hint, :active, :earned_at, :id
     attr_accessor :verb, :threshold, :tags, :definition_id
 
 #  example: 
@@ -42,8 +42,14 @@ module Badgeville
       end
     end
 
+    def image_url(format = 'original')
+      @image_url.sub('original', format)
+    end
+
+    # <b>DEPRECATED:</b> Please use <tt>image_url('grayscale')</tt> instead.
     def grayscale_url
-      @image_url.sub('original.png', 'grayscale.png')
+      warn "[DEPRECATION] `grayscale_url` is deprecated.  Please use `image_url('grayscale')` instead."
+      image_url('grayscale')
     end
 
     private
