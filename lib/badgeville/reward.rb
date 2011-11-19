@@ -42,14 +42,14 @@ module Badgeville
       end
     end
 
-    def image_url(format = 'original')
-      @image_url.sub('original', format)
+    def image_url(format = :original)
+      @image_url.sub('original', format.to_s)
     end
 
     # <b>DEPRECATED:</b> Please use <tt>image_url('grayscale')</tt> instead.
     def grayscale_url
-      warn "[DEPRECATION] `grayscale_url` is deprecated.  Please use `image_url('grayscale')` instead."
-      image_url('grayscale')
+      warn "[DEPRECATION] `grayscale_url` is deprecated.  Please use `image_url(:grayscale)` instead."
+      image_url(:grayscale)
     end
 
     private

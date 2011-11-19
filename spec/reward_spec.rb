@@ -49,7 +49,7 @@ describe Badgeville::Reward do
       end
 
       it "allows to request specific formats" do
-        ['original', 'large', 'medium', 'grayscale', 'grayscale_small'].each do |format|
+        [:original, :large, :medium, :grayscale, :grayscale_small].each do |format|
           @reward.image_url(format).should == "http://s3.amazon.com/#{format}.png?1"
         end
       end
