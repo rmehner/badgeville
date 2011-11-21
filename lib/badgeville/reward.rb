@@ -5,7 +5,9 @@ module Badgeville
     attr_accessor :name, :hint, :active, :earned_at, :id, :message
     attr_accessor :verb, :threshold, :tags, :definition_id
 
-#  example: 
+    attr_writer :image_url
+
+#  example:
 #  {
 #    "name": "A Way with Words",
 #    "active_start_at": null,
@@ -56,12 +58,11 @@ module Badgeville
     private
 
     def init_from(json)
-      @name      = json["name"]
-      @active    = json["active"]
-      @hint      = json["hint"]
-      @image_url = json["image_url"]
-      @id        = @definition_id = json["_id"]
-      @message   = json["message"]
+      ['name', 'active', 'hint', 'image_url', 'message'].each do |key|
+        send("#{key}=", json[key])
+      end
+
+      @id = @definition_id = json["_id"]
 
       if json["data"] && json["type"] == "achievement"
         @verb = json["data"]["verb"]
