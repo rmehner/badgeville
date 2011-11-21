@@ -26,7 +26,8 @@ describe Badgeville::Reward do
     "assignable": false,
     "allow_duplicates": false,
     "site_id": "4e4d5bf5c47eed25a0000e8f",
-    "active": true
+    "active": true,
+    "message": "You won the internet!"
    }')
   end
 
@@ -41,6 +42,7 @@ describe Badgeville::Reward do
       @reward.id.should == "4e4dfab6c47eed727b005c38"
       @reward.tags.should == []
       @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
+      @reward.message.should == 'You won the internet!'
     end
 
     describe "image_url" do
@@ -89,6 +91,7 @@ describe Badgeville::Reward do
       @reward.earned_at.iso8601.should == Time.parse(@parsed_json["created_at"]).iso8601
       @reward.id.should == "new_id"
       @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
+      @reward.message.should == 'You won the internet!'
     end
   end
 
