@@ -2,7 +2,7 @@
 module Badgeville
   class Reward
     include Badgeville::Helpers
-    attr_accessor :name, :hint, :active, :earned_at, :id
+    attr_accessor :name, :hint, :active, :earned_at, :id, :message
     attr_accessor :verb, :threshold, :tags, :definition_id
 
 #  example: 
@@ -29,7 +29,8 @@ module Badgeville
 #    "assignable": false,
 #    "allow_duplicates": false,
 #    "site_id": "4e4d5bf5c47eed25a0000e8f",
-#    "active": true
+#    "active": true,
+#    "message": "You won the internet!"
 #   }
     def initialize(json=nil)
       if json
@@ -55,11 +56,13 @@ module Badgeville
     private
 
     def init_from(json)
-      @name = json["name"]
-      @active = json["active"]
-      @hint = json["hint"]
+      @name      = json["name"]
+      @active    = json["active"]
+      @hint      = json["hint"]
       @image_url = json["image_url"]
-      @id = @definition_id = json["_id"]
+      @id        = @definition_id = json["_id"]
+      @message   = json["message"]
+
       if json["data"] && json["type"] == "achievement"
         @verb = json["data"]["verb"]
         @threshold = json["data"]["threshold"].to_i
