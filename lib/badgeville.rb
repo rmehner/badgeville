@@ -6,8 +6,9 @@ require 'badgeville/reward'
 
 module Badgeville
   TIMEOUT_SECS = 3
-  HOST = "sandbox.v2.badgeville.com"
-  PROTOCOL = "http"
+  HOST         = "sandbox.v2.badgeville.com"
+  PROTOCOL     = "http"
+  MAX_PER_PAGE = 50
 
   class BadgevilleError < StandardError
     attr_accessor :code, :data
@@ -64,9 +65,15 @@ module Badgeville
 
     def reward_definitions
       unless @reward_definitions
-        response = make_call(:get, :reward_definitions)
-        @reward_definitions = response["data"].map do |reward_json|
-          Reward.new(reward_json)
+        @reward_definitions  = []
+        current_page         = 1
+        response             = rewards_for_page(current_page)
+        @reward_definitions += rewards_from_response(response)
+
+        (response["paging"]["total_pages"].to_i - 1).times do
+          @reward_definitions += rewards_from_response(
+            rewards_for_page(current_page += 1)
+          )
         end
       end
       @reward_definitions
@@ -192,6 +199,16 @@ module Badgeville
 
     def to_query params
       URI.escape(params.map { |k,v| "#{k.to_s}=#{v.to_s}" }.join("&"))
+    end
+
+    def rewards_from_response(response)
+      response["data"].map do |reward_json|
+        Reward.new(reward_json)
+      end
+    end
+
+    def rewards_for_page(page)
+      make_call(:get, :reward_definitions, {per_page: MAX_PER_PAGE, page: page})
     end
   end
 end
