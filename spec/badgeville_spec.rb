@@ -86,13 +86,13 @@ describe Badgeville do
     before do
       site = "example.com"
       base_url = "http://#{Badgeville::HOST}/api/berlin/api_key/activities.json"
-      total_url = base_url + "?site=#{site}&user=#{@user}"
+      total_url = base_url + "?include_totals=true&site=#{site}&user=#{@user}"
       @total_count = 2
       total_response = {"data" => [],
         "paging" => {"total_entries" => @total_count}}
       stub_http_request(:get, total_url).to_return(:body => total_response.to_json)
       @verb_count = 1
-      verb_url = base_url + "?site=#{site}&user=#{@user}&verb=verb"
+      verb_url = base_url + "?include_totals=true&site=#{site}&user=#{@user}&verb=verb"
       verb_response = {"data" => [],
         "paging" => {"total_entries" => @verb_count}}
       stub_http_request(:get, verb_url).

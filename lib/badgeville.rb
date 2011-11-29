@@ -58,7 +58,7 @@ module Badgeville
     end
 
     def count_activities(opts={})
-      response = make_call(:get, :activities, opts)
+      response = make_call(:get, :activities, opts.merge(:include_totals => true))
       response["paging"]["total_entries"].to_i
     end
 
