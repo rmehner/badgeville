@@ -112,10 +112,12 @@ describe Badgeville do
     before do
       @url = /http:\/\/#{Badgeville::HOST}.*reward_definitions.json.*user=#{@user}.*/
       rewards_on_first_page = {
-        "data" => [{"name" => "Big Bang"}], "paging" => {"total_pages" => 2}
+        "data" => [{"name" => "Big Bang"}],
+        "paging" => {"current_page" => 1,"total_pages" => 2}
       }
       rewards_on_second_page = {
-        "data" => [{"name" => "Small Bang"}], "paging" => {"total_pages" => 2}
+        "data" => [{"name" => "Small Bang"}],
+        "paging" => {"current_page" => 2,"total_pages" => 2}
       }
 
       stub_http_request(:get, @url).to_return(

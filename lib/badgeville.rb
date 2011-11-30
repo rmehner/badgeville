@@ -8,7 +8,6 @@ module Badgeville
   TIMEOUT_SECS = 3
   HOST         = "sandbox.v2.badgeville.com"
   PROTOCOL     = "http"
-  MAX_PER_PAGE = 50
 
   class BadgevilleError < StandardError
     attr_accessor :code, :data
@@ -36,6 +35,7 @@ module Badgeville
       @host = opts['host'] || HOST
       @protocol = opts['protocol'] || PROTOCOL
       @user = email
+      @per_page = opts['per_page']
     end
 
     def log_activity(activity, opts={})
@@ -65,15 +65,9 @@ module Badgeville
 
     def reward_definitions
       unless @reward_definitions
-        @reward_definitions  = []
-        current_page         = 1
-        response             = rewards_for_page(current_page)
-        @reward_definitions += rewards_from_response(response)
-
-        (response["paging"]["total_pages"].to_i - 1).times do
-          @reward_definitions += rewards_from_response(
-            rewards_for_page(current_page += 1)
-          )
+        pages = all_pages_for(:reward_definitions)
+        @reward_definitions = pages.inject([]) do |definitions, page|
+          definitions += rewards_from_response(page)
         end
       end
       @reward_definitions
@@ -81,9 +75,9 @@ module Badgeville
 
     def get_rewards
       begin
-        response = make_call(:get, :rewards)
-        response["data"].map do |reward_json|
-          Reward.new(reward_json)
+        pages = all_pages_for(:rewards)
+        pages.inject([]) do |rewards, page|
+          rewards += rewards_from_response(page)
         end
       rescue BadgevilleError => e
         raise e unless e.code == 404
@@ -173,6 +167,9 @@ module Badgeville
       begin
         case method
         when :get
+          unless @per_page.nil? || params.has_key?(:per_page)
+            params[:per_page] = @per_page
+          end
           response = session[end_point].send(method, :params => params)
         when :post, :put, :delete
           response = session[end_point].send(method, to_query(params))
@@ -207,8 +204,26 @@ module Badgeville
       end
     end
 
-    def rewards_for_page(page)
-      make_call(:get, :reward_definitions, {per_page: MAX_PER_PAGE, page: page})
+    def get_page(action, page, params={})
+      make_call(:get, action, params.merge(page: page))
+    end
+
+    def all_pages_for(action, params={})
+      pages = []
+      current_page = 1
+      total_pages = nil
+      while total_pages.nil? || current_page <= total_pages
+        params[:include_totals] = true unless total_pages
+        response  = get_page(:reward_definitions, current_page, params)
+        pages << response
+        if response["paging"]
+          current_page = response["paging"]["current_page"].to_i + 1
+          total_pages = response["paging"]["total_pages"].to_i if total_pages.nil?
+        else
+          total_pages = 0
+        end
+      end
+      pages
     end
   end
 end
