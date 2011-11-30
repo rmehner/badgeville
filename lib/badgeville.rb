@@ -214,7 +214,7 @@ module Badgeville
       total_pages = nil
       while total_pages.nil? || current_page <= total_pages
         params[:include_totals] = true unless total_pages
-        response  = get_page(:reward_definitions, current_page, params)
+        response  = get_page(action, current_page, params)
         pages << response
         if response["paging"]
           current_page = response["paging"]["current_page"].to_i + 1
