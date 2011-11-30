@@ -111,15 +111,30 @@ describe Badgeville do
   describe "#reward_definitions" do
     before do
       @url = /http:\/\/#{Badgeville::HOST}.*reward_definitions.json.*user=#{@user}.*/
-      mock_rewards = {"data" => [{"name" => "Big Bang"}]}
-      stub_http_request(:get, @url).to_return(:body => mock_rewards.to_json)
+      rewards_on_first_page = {
+        "data" => [{"name" => "Big Bang"}], "paging" => {"total_pages" => 2}
+      }
+      rewards_on_second_page = {
+        "data" => [{"name" => "Small Bang"}], "paging" => {"total_pages" => 2}
+      }
+
+      stub_http_request(:get, @url).to_return(
+        {:body => rewards_on_first_page.to_json},
+        {:body => rewards_on_second_page.to_json}
+      )
+
       @rewards = @badgeville.reward_definitions
     end
 
-    it "should return an array of rewards" do
+    it "should return an array of all rewards" do
       @rewards.class.should be(Array)
+      @rewards.count.should == 2
+
       @rewards.first.class.should be(Badgeville::Reward)
       @rewards.first.name.should == "Big Bang"
+
+      @rewards[1].class.should be(Badgeville::Reward)
+      @rewards[1].name.should == "Small Bang"
     end
   end
 
