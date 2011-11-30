@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Gilad Buchman"]
-  s.date = %q{2011-11-15}
+  s.date = %q{2011-11-30}
   s.description = %q{Client for Badgeville's Core API v2. http://rules.badgeville.com}
   s.extra_rdoc_files = [
     "README.md"
