@@ -49,3 +49,4 @@ keys.json
 
 # For rubinius:
 #*.rbc
+keys.json.dev
