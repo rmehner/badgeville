@@ -1,3 +1,8 @@
+* 0.0.7
+
+* support pagination and get all pages for rewards and rewards definitions
+* misc bug fixes
+
 * 0.0.6
 
 * change set player to use new players/info end point
