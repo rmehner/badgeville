@@ -17,6 +17,18 @@ settings = JSON.parse(File.read('keys.json.example'))
 badgeville = Badgeville::Client.new(email, settings)
 ```
 
+* register user and player on site
+
+```ruby
+badgeville.create_player
+```
+
+* get player id
+
+```ruby
+badgeville.player_info
+```
+
 * log actions
 
 ```ruby

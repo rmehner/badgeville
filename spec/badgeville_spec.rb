@@ -174,7 +174,7 @@ describe Badgeville do
     end
   end
 
-  describe "#set_player" do
+  describe "#player_info" do
     before do
       @url = /http:\/\/#{Badgeville::HOST}.*\/players\/info\.json.*email=#{@user}.*/
       stub_http_request(:get, @url).to_return(:body => {"data" => {"id" => "1", "site_id" => "site"}}.to_json)
@@ -194,4 +194,71 @@ describe Badgeville do
     it {new_badgeville.timeout.should == 10}
   end
 
+  describe "#create_player" do
+    before do
+      url = /http:\/\/#{Badgeville::HOST}.*\/players\/info\.json.*email=#{@user}.*/
+      stub_http_request(:get, url).to_return(:status => 404,
+        :body => {"errors" => {"error" => "invalid player"}}.to_json)
+
+      players_url = /http:\/\/#{Badgeville::HOST}.*\/players\.json/
+      body = "email=#{@user}&site=example.com&player[email]=#{@user}"
+      result = {"_id" => "1","id" => "1", "site_id" => "site_id"}
+      stub_http_request(:post, players_url).with(body: body).
+        to_return(:body => result.to_json)
+
+      @users_url = /http:\/\/#{Badgeville::HOST}.*\/users\.json/
+      @users_body = "user[email]=#{@user}"
+    end
+
+    context "with new user" do
+      before do
+        result = {"_id" => "1","email" => @user}
+        stub_http_request(:post, @users_url).with(body: @users_body).
+          to_return(:body => result.to_json)
+        @response = @badgeville.create_player
+      end
+
+      it "returns the created player id" do
+        @response.should == "1"
+      end
+
+      it "sets player id" do
+        @badgeville.player_id.should == "1"
+      end
+
+    context "with existing user on new site" do
+      before do
+          result = {"errors" => {"email" => ["is already taken"]}}
+          stub_http_request(:post, @users_url).with(body: @users_body).
+            to_return(:status => 422, :body => result.to_json)
+          @response = @badgeville.create_player
+        end
+      end
+
+      it "returns the created player id" do
+        @response.should == "1"
+      end
+
+      it "sets player id" do
+        @badgeville.player_id.should == "1"
+      end
+    end
+
+    context "when player already exists" do
+      before do
+        url = /http:\/\/#{Badgeville::HOST}.*\/players\/info\.json.*email=#{@user}.*/
+        stub_http_request(:get, url).
+          to_return(:body => {"data" => {"id" => "1", "site_id" => "site"}}.to_json)
+        @response = @badgeville.create_player
+      end
+
+      it "returns the created player id" do
+        @response.should == "1"
+      end
+
+      it "sets player id" do
+        @badgeville.player_id.should == "1"
+      end
+    end
+  end
 end

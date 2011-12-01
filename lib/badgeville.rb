@@ -24,7 +24,8 @@ module Badgeville
   end
 
   class Client
-    attr_accessor :user, :site, :player_id, :site_id, :timeout
+    include Helpers
+    attr_accessor :user, :site, :player_id, :site_id, :timeout, :debug
 
     def initialize (email, opts={})
       # Required Parameters
@@ -38,15 +39,35 @@ module Badgeville
       @per_page = opts['per_page']
     end
 
-    def log_activity(activity, opts={})
-      params = {
-        "activity[verb]" => activity,
-      }
-      opts.inject(params) do |params, entry|
-        k, v = entry
-        params["activity[#{k.to_s}]"] = v
-        params
+    def create_player(opts={})
+      #try to see if player already exists
+      begin
+        return player_info
+      rescue
       end
+
+      #try to create user
+      begin
+        params = property_params(:user, {email: @user}.merge(opts))
+        response = make_call(:post, :users, params)
+      rescue BadgevilleError => e
+        unless e.code == 422 &&
+            ensure_array(e.data["email"]).include?("is already taken")
+            raise e
+        end
+      end
+
+      #create player
+      params = {email: @user, site: @site}.merge(
+                 property_params(:player, {email: @user}.merge(
+                 opts)))
+      json = make_call(:post, :players, params)
+      @site_id = json["site_id"]
+      @player_id = json["id"]
+    end
+
+    def log_activity(activity, opts={})
+      params = property_params(:activity, {verb: activity}.merge(opts))
       response = make_call(:post, :activities, params)
       Activity.new(response)
     end
@@ -110,20 +131,21 @@ module Badgeville
       end
     end
 
-    def set_player
+    def player_info
       end_point = "/players/info.json"
       begin
-        response = session[end_point].get(:params =>
-                                          {:email => @user, :site => @site})
+        params = {:email => @user, :site => @site}
+        puts "GET /players/info.json #{params}" if debug
+        response = session[end_point].get(:params => params)
         data = response.body
         json = JSON.parse(data)
         json = json["data"]
-        @player_id = json["id"]
         @site_id = json["site_id"]
+        @player_id = json["id"]
       rescue => e
         if e.respond_to? :response
           data = JSON.parse(e.response)
-          raise BadgevilleError.new(e.http_code, data["error"])
+          raise BadgevilleError.new(e.http_code, data["errors"]["error"])
         else
           raise e
         end
@@ -132,14 +154,14 @@ module Badgeville
 
     def site_id
       unless @site_id
-        set_player
+        player_info
       end
       @site_id
     end
 
     def player_id
       unless @player_id
-        set_player
+        player_info
       end
       @player_id
     end
@@ -161,15 +183,12 @@ module Badgeville
 
     def make_call(method, action, params={})
       end_point = "#{action.to_s}.json"
-      unless params.keys.any? { |k| k =~ /player_id/ }
-        params.merge!(:user => @user, :site => @site)
-      end
+      params = add_default_params(method, action, params)
+      puts "#{method.to_s.upcase} #{session[end_point]} #{params}" if debug
+
       begin
         case method
         when :get
-          unless @per_page.nil? || params.has_key?(:per_page)
-            params[:per_page] = @per_page
-          end
           response = session[end_point].send(method, :params => params)
         when :post, :put, :delete
           response = session[end_point].send(method, to_query(params))
@@ -196,6 +215,18 @@ module Badgeville
 
     def to_query params
       URI.escape(params.map { |k,v| "#{k.to_s}=#{v.to_s}" }.join("&"))
+    end
+
+    def add_default_params(method, action, params)
+      should_not_add = params.keys.none? { |k| k =~ /player_id/ }
+      should_not_add &= [:users, :players].include? action
+      unless should_not_add
+        params.merge!(:user => @user, :site => @site)
+      end
+      if method == :get && @per_page && !params.has_key?(:per_page)
+        params[:per_page] = @per_page
+      end
+      params
     end
 
     def rewards_from_response(response)
