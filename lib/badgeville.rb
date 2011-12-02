@@ -131,11 +131,16 @@ module Badgeville
       end
     end
 
+    def debug=(flag)
+      log_file = flag ? "stdout" : nil
+      RestClient.log = log_file
+      @debug = flag
+    end
+
     def player_info
       end_point = "/players/info.json"
       begin
         params = {:email => @user, :site => @site}
-        puts "GET /players/info.json #{params}" if debug
         response = session[end_point].get(:params => params)
         data = response.body
         json = JSON.parse(data)
@@ -143,7 +148,7 @@ module Badgeville
         @site_id = json["site_id"]
         @player_id = json["id"]
       rescue => e
-        if e.respond_to? :response
+        if e.respond_to? :response && e.response
           data = JSON.parse(e.response)
           raise BadgevilleError.new(e.http_code, data["errors"]["error"])
         else
@@ -184,7 +189,6 @@ module Badgeville
     def make_call(method, action, params={})
       end_point = "#{action.to_s}.json"
       params = add_default_params(method, action, params)
-      puts "#{method.to_s.upcase} #{session[end_point]} #{params}" if debug
 
       begin
         case method
@@ -196,6 +200,7 @@ module Badgeville
         data = response.body
         json = JSON.parse(data)
       rescue => e
+        puts e if debug
         if e.respond_to? :response
           begin
             data = JSON.parse(e.response)
