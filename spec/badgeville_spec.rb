@@ -228,7 +228,7 @@ describe Badgeville do
 
     context "with existing user on new site" do
       before do
-          result = {"errors" => {"email" => ["is already taken"]}}
+          result = {"errors" => {"email" => ["user email is already taken"]}}
           stub_http_request(:post, @users_url).with(body: @users_body).
             to_return(:status => 422, :body => result.to_json)
           @response = @badgeville.create_player

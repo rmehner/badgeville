@@ -51,9 +51,12 @@ module Badgeville
         params = property_params(:user, {email: @user}.merge(opts))
         response = make_call(:post, :users, params)
       rescue BadgevilleError => e
-        unless e.code == 422 &&
-            ensure_array(e.data["email"]).include?("is already taken")
+        if e.code != 422
+          if ensure_array(e.data["email"]).none? {|erorr_msg|
+            error_msg =~ "is already taken"
+          }
             raise e
+          end
         end
       end
 
