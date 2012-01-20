@@ -47,13 +47,17 @@ describe Badgeville::Reward do
 
     describe "image_url" do
       it "returns the original url by default" do
-        @reward.image_url.should == 'http://s3.amazon.com/original.png?1'
+        @reward.image_url.should == '//s3.amazon.com/original.png?1'
       end
 
       it "allows to request specific formats" do
         [:original, :large, :medium, :grayscale, :grayscale_small].each do |format|
-          @reward.image_url(format).should == "http://s3.amazon.com/#{format}.png?1"
+          @reward.image_url(format).should == "//s3.amazon.com/#{format}.png?1"
         end
+      end
+
+      it "returns a protocol relative url" do
+        @reward.image_url.should == '//s3.amazon.com/original.png?1'
       end
     end
 
