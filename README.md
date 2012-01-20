@@ -1,9 +1,9 @@
 Badgeville API
 ============
 
-Client for Badgeville API http://rules.badgeville.com/
+note: NOT ACTIVELY DEVELOPED - feel free to fork and run with it
 
-(not complete)
+Client for Badgeville API http://rules.badgeville.com/
 
 Usage
 --------
