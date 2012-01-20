@@ -56,7 +56,14 @@ describe Badgeville::Reward do
         end
       end
 
-      it "returns a protocol relative url" do
+      it "returns a protocol relative url for a http original image url" do
+        @reward.image_url.should == '//s3.amazon.com/original.png?1'
+      end
+
+      it "returns a protocol relative url for a https original image url" do
+        @parsed_json['image_url'] = 'https://s3.amazon.com/original.png?1'
+        reward = Badgeville::Reward.new(@parsed_json)
+
         @reward.image_url.should == '//s3.amazon.com/original.png?1'
       end
     end
