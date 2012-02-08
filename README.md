@@ -1,9 +1,7 @@
 [![Build Status](https://secure.travis-ci.org/rmehner/badgeville.png)](http://travis-ci.org/rmehner/badgeville)
 
 Badgeville API
-============
-
-note: NOT ACTIVELY DEVELOPED - feel free to fork and run with it
+==============
 
 Client for Badgeville API http://rules.badgeville.com/
 
