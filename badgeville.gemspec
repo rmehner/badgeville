@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version = "0.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Gilad Buchman"]
+  s.authors = ["Gilad Buchman", "Robin Mehner"]
   s.date = %q{2011-11-30}
   s.description = %q{Client for Badgeville's Core API v2. http://rules.badgeville.com}
   s.extra_rdoc_files = [
@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
     "spec/reward_spec.rb",
     "spec/spec_helper.rb"
   ]
-  s.homepage = %q{http://github.com/Keasinc/badgeville}
+  s.homepage = %q{http://github.com/rmehner/badgeville}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.6.2}
