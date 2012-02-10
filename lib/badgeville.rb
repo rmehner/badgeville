@@ -3,6 +3,7 @@ require 'rest_client'
 require 'badgeville/helpers'
 require 'badgeville/activity'
 require 'badgeville/reward'
+require 'badgeville/version'
 
 module Badgeville
   TIMEOUT_SECS = 3
