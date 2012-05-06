@@ -40,7 +40,6 @@ describe Badgeville::Reward do
       @reward.name.should == "A Way with Words"
       @reward.active.should be_true
       @reward.id.should == "4e4dfab6c47eed727b005c38"
-      @reward.tags.should == []
       @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
       @reward.message.should == 'You won the internet!'
     end
@@ -68,22 +67,30 @@ describe Badgeville::Reward do
       end
     end
 
-    context "has one tag" do
-      before do
-        @parsed_json["tags"] = "tag"
-        @reward = Badgeville::Reward.new(@parsed_json)
+    describe "tags" do
+      it "returns an empty array if no tag key is in the parsed json" do
+        @reward = Badgeville::Reward.new({})
+
+        @reward.tags.should == []
       end
 
-      it {@reward.tags.should == ["tag"]}
-    end
+      it "returns an empty array if no tags are defined" do
+        @reward = Badgeville::Reward.new('tags' => nil)
 
-    context "has multiple tags" do
-      before do
-        @parsed_json["tags"] = "tag1, tag2"
-        @reward = Badgeville::Reward.new(@parsed_json)
+        @reward.tags.should == []
       end
 
-      it {@reward.tags.should == ["tag1", "tag2"]}
+      it "returns the defined tag" do
+        @reward = Badgeville::Reward.new('tags' => ['tag'])
+
+        @reward.tags.should == ["tag"]
+      end
+
+      it "returns all defined tags" do
+        @reward = Badgeville::Reward.new('tags' =>['tag1', 'tag2'])
+
+        @reward.tags.should == ['tag1', 'tag2']
+      end
     end
   end
 

@@ -68,10 +68,8 @@ module Badgeville
         @verb = json["data"]["verb"]
         @threshold = json["data"]["threshold"].to_i
       end
-      @tags = []
-      if json["tags"]
-        @tags = json["tags"].split(',').map(&:strip)
-      end
+
+      @tags = json['tags'] || []
     end
   end
 end
