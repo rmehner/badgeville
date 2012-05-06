@@ -1,4 +1,4 @@
-0.1.0 (May 5, 2012)
+0.1.0 (May 6, 2012)
 ===================
 
 * Fixed support for new response format in tags
