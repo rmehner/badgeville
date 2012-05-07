@@ -1,3 +1,8 @@
+0.1.1 (May 7, 2012)
+===================
+
+* Reward#image_url now returns nil if no image was defined in the parsed json
+
 0.1.0 (May 6, 2012)
 ===================
 

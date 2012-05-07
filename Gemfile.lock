@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    badgeville (0.0.8)
+    badgeville (0.1.1)
       json
       rest-client
 
