@@ -63,7 +63,7 @@ describe Badgeville::Reward do
         @parsed_json['image_url'] = 'https://s3.amazon.com/original.png?1'
         reward = Badgeville::Reward.new(@parsed_json)
 
-        @reward.image_url.should == '//s3.amazon.com/original.png?1'
+        reward.image_url.should == '//s3.amazon.com/original.png?1'
       end
 
       it "returns nil if the image url is nil in the parsed json" do
