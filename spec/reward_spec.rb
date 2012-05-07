@@ -65,6 +65,13 @@ describe Badgeville::Reward do
 
         @reward.image_url.should == '//s3.amazon.com/original.png?1'
       end
+
+      it "returns nil if the image url is nil in the parsed json" do
+        @parsed_json['image_url'] = nil
+        reward = Badgeville::Reward.new(@parsed_json)
+
+        reward.image_url.should be_nil
+      end
     end
 
     describe "tags" do

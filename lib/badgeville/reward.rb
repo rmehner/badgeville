@@ -46,7 +46,7 @@ module Badgeville
     end
 
     def image_url(format = :original)
-      @image_url.sub('original', format.to_s).sub(/^https?:/, '')
+      @image_url.sub('original', format.to_s).sub(/^https?:/, '') if @image_url
     end
 
     # <b>DEPRECATED:</b> Please use <tt>image_url('grayscale')</tt> instead.
