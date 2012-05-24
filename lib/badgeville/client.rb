@@ -1,5 +1,9 @@
 module Badgeville
   class Client
+    TIMEOUT_SECS = 3
+    HOST         = "sandbox.v2.badgeville.com"
+    PROTOCOL     = "http"
+
     include Helpers
     attr_accessor :user, :site, :player_id, :site_id, :timeout, :debug
 
