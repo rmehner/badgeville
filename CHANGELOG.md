@@ -2,6 +2,7 @@
 ====================
 
 * Activity now lazily loads it's attributes
+* Client now defaults to https
 
 0.1.1 (May 7, 2012)
 ===================

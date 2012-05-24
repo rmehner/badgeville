@@ -46,7 +46,7 @@ describe Badgeville::Client do
 
   describe "#get_activities" do
     before do
-      @url = /http:\/\/#{Badgeville::Client::HOST}.*activities.json.*user=#{@user}.*/
+      @url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*activities.json.*user=#{@user}.*/
       mock_activities = {
         "data" => [
                    {
@@ -68,12 +68,17 @@ describe Badgeville::Client do
 
   describe "#count_activities" do
     before do
-      site = "example.com"
-      base_url = "http://#{Badgeville::Client::HOST}/api/berlin/api_key/activities.json"
-      total_url = base_url + "?include_totals=true&site=#{site}&user=#{@user}"
-      @total_count = 2
-      total_response = {"data" => [],
-        "paging" => {"total_entries" => @total_count}}
+      site           = "example.com"
+      base_url       = "#{Badgeville::Client::PROTOCOL}://#{Badgeville::Client::HOST}/api/berlin/api_key/activities.json"
+      total_url      = base_url + "?include_totals=true&site=#{site}&user=#{@user}"
+      @total_count   = 2
+      total_response = {
+        "data" => [],
+        "paging" => {
+          "total_entries" => @total_count
+        }
+      }
+
       stub_http_request(:get, total_url).to_return(:body => total_response.to_json)
       @verb_count = 1
       verb_url = base_url + "?include_totals=true&site=#{site}&user=#{@user}&verb=verb"
@@ -94,7 +99,7 @@ describe Badgeville::Client do
 
   describe "#reward_definitions" do
     before do
-      @url = /http:\/\/#{Badgeville::Client::HOST}.*reward_definitions.json.*user=#{@user}.*/
+      @url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*reward_definitions.json.*user=#{@user}.*/
       rewards_on_first_page = {
         "data" => [{"name" => "Big Bang"}],
         "paging" => {"current_page" => 1,"total_pages" => 2}
@@ -129,7 +134,7 @@ describe Badgeville::Client do
       @mock_reward = Badgeville::Reward.new
       @mock_reward.id = 5
       @mock_reward.earned_at = Time.now
-      @url = /http:\/\/#{Badgeville::Client::HOST}.*rewards\/5.json/
+      @url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*rewards\/5.json/
       stub_http_request(:delete, @url).to_return(:status => 200)
     end
 
@@ -160,7 +165,7 @@ describe Badgeville::Client do
 
   describe "#player_info" do
     before do
-      @url = /http:\/\/#{Badgeville::Client::HOST}.*\/players\/info\.json.*email=#{@user}.*/
+      @url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*\/players\/info\.json.*email=#{@user}.*/
       stub_http_request(:get, @url).to_return(:body => {"data" => {"id" => "1", "site_id" => "site"}}.to_json)
     end
 
@@ -180,17 +185,17 @@ describe Badgeville::Client do
 
   describe "#create_player" do
     before do
-      url = /http:\/\/#{Badgeville::Client::HOST}.*\/players\/info\.json.*email=#{@user}.*/
+      url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*\/players\/info\.json.*email=#{@user}.*/
       stub_http_request(:get, url).to_return(:status => 404,
         :body => {"errors" => {"error" => "invalid player"}}.to_json)
 
-      players_url = /http:\/\/#{Badgeville::Client::HOST}.*\/players\.json/
+      players_url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*\/players\.json/
       body = "email=#{@user}&site=example.com&player[email]=#{@user}"
       result = {"_id" => "1","id" => "1", "site_id" => "site_id"}
       stub_http_request(:post, players_url).with(body: body).
         to_return(:body => result.to_json)
 
-      @users_url = /http:\/\/#{Badgeville::Client::HOST}.*\/users\.json/
+      @users_url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*\/users\.json/
       @users_body = "user[email]=#{@user}"
     end
 
@@ -230,7 +235,7 @@ describe Badgeville::Client do
 
     context "when player already exists" do
       before do
-        url = /http:\/\/#{Badgeville::Client::HOST}.*\/players\/info\.json.*email=#{@user}.*/
+        url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*\/players\/info\.json.*email=#{@user}.*/
         stub_http_request(:get, url).
           to_return(:body => {"data" => {"id" => "1", "site_id" => "site"}}.to_json)
         @response = @badgeville.create_player
