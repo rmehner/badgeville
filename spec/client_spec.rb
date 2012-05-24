@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'spec_helper'
 
-describe Badgeville do
+describe Badgeville::Client do
   before do
     @user = "user"
     @badgeville = Badgeville::Client.new @user, 'private_key' => "api_key",
@@ -16,7 +16,7 @@ describe Badgeville do
         "points" => 0,
         "player_id" => "4e5d3992c47eed202d00148c",
         "user_id" => "4e5d3992c47eed202d00148b",
-        "rewards" =>[]
+        "rewards" => []
       }
       @body = "activity[verb]=#{@action_name}"
       @user_data = "&user=#{@user}&site=example.com"
