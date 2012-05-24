@@ -16,3 +16,4 @@ doc
 keys.json
 keys.json.dev
 keys.json.pro
+Gemfile.lock
