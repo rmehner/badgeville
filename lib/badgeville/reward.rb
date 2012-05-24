@@ -40,7 +40,7 @@ module Badgeville
         reward_definition ? init_from(reward_definition) : init_from(json)
         if json.has_key?('user_id') # it's an earned reward for a specific user
           @earned_at = DateTime.parse(json["created_at"]).to_time
-          @id = json["id"]
+          @id        = json["id"]
         end
       end
     end
@@ -65,7 +65,7 @@ module Badgeville
       @id = @definition_id = json["_id"]
 
       if json["data"] && json["type"] == "achievement"
-        @verb = json["data"]["verb"]
+        @verb      = json["data"]["verb"]
         @threshold = json["data"]["threshold"].to_i
       end
 

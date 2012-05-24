@@ -1,5 +1,6 @@
 require 'json'
 require 'rest_client'
+require 'badgeville/error'
 require 'badgeville/helpers'
 require 'badgeville/activity'
 require 'badgeville/reward'
@@ -10,37 +11,23 @@ module Badgeville
   HOST         = "sandbox.v2.badgeville.com"
   PROTOCOL     = "http"
 
-  class BadgevilleError < StandardError
-    attr_accessor :code, :data
-
-    def initialize (err_code=nil, error_data="")
-      super error_data.to_s
-      @data = error_data
-      @code = err_code
-    end
-
-    def to_s
-      "ERROR #{@code} : #{@data}"
-    end
-  end
-
   class Client
     include Helpers
     attr_accessor :user, :site, :player_id, :site_id, :timeout, :debug
 
-    def initialize (email, opts={})
+    def initialize (email, opts = {})
       # Required Parameters
-      @site = opts['site']
+      @site        = opts['site']
       @private_key = opts['private_key']
-      @public_key = opts['public_key']
-      @timeout = opts['timeout'] || TIMEOUT_SECS
-      @host = opts['host'] || HOST
-      @protocol = opts['protocol'] || PROTOCOL
-      @user = email
-      @per_page = opts['per_page']
+      @public_key  = opts['public_key']
+      @timeout     = opts['timeout'] || TIMEOUT_SECS
+      @host        = opts['host'] || HOST
+      @protocol    = opts['protocol'] || PROTOCOL
+      @user        = email
+      @per_page    = opts['per_page']
     end
 
-    def create_player(opts={})
+    def create_player(opts = {})
       #try to see if player already exists
       begin
         return player_info
@@ -49,7 +36,7 @@ module Badgeville
 
       #try to create user
       begin
-        params = property_params(:user, {email: @user}.merge(opts))
+        params   = property_params(:user, {email: @user}.merge(opts))
         response = make_call(:post, :users, params)
       rescue BadgevilleError => e
         if e.code != 422
@@ -62,35 +49,38 @@ module Badgeville
       end
 
       #create player
-      params = {email: @user, site: @site}.merge(
-                 property_params(:player, {email: @user}.merge(
-                 opts)))
-      json = make_call(:post, :players, params)
-      @site_id = json["site_id"]
+      params     = {
+        email: @user,
+        site: @site
+      }.merge(
+        property_params(:player, {email: @user}.merge(opts))
+      )
+      json       = make_call(:post, :players, params)
+      @site_id   = json["site_id"]
       @player_id = json["id"]
     end
 
-    def log_activity(activity, opts={})
-      params = property_params(:activity, {verb: activity}.merge(opts))
+    def log_activity(activity, opts = {})
+      params   = property_params(:activity, {verb: activity}.merge(opts))
       response = make_call(:post, :activities, params)
       Activity.new(response)
     end
 
-    def get_activities(opts={})
+    def get_activities(opts = {})
       response = make_call(:get, :activities, opts)
       response["data"].map do |activity_json|
         Activity.new(activity_json)
       end
     end
 
-    def count_activities(opts={})
+    def count_activities(opts = {})
       response = make_call(:get, :activities, opts.merge(:include_totals => true))
       response["paging"]["total_entries"].to_i
     end
 
     def reward_definitions
       unless @reward_definitions
-        pages = all_pages_for(:reward_definitions)
+        pages               = all_pages_for(:reward_definitions)
         @reward_definitions = pages.inject([]) do |definitions, page|
           definitions += rewards_from_response(page)
         end
@@ -110,7 +100,7 @@ module Badgeville
       end
     end
 
-    def award reward_name
+    def award(reward_name)
       reward = reward_definitions.select do |reward|
         reward.name == reward_name
       end.first
@@ -122,7 +112,7 @@ module Badgeville
       Reward.new(make_call(:post, :rewards, params))
     end
 
-    def delete reward
+    def delete(reward)
       if reward.respond_to?(:earned_at) && reward.earned_at
         end_point = "rewards/#{reward.id}.json"
         begin
@@ -136,20 +126,20 @@ module Badgeville
     end
 
     def debug=(flag)
-      log_file = flag ? "stdout" : nil
+      log_file       = flag ? "stdout" : nil
       RestClient.log = log_file
-      @debug = flag
+      @debug         = flag
     end
 
     def player_info
       end_point = "/players/info.json"
       begin
-        params = {:email => @user, :site => @site}
-        response = session[end_point].get(:params => params)
-        data = response.body
-        json = JSON.parse(data)
-        json = json["data"]
-        @site_id = json["site_id"]
+        params     = {:email => @user, :site => @site}
+        response   = session[end_point].get(:params => params)
+        data       = response.body
+        json       = JSON.parse(data)
+        json       = json["data"]
+        @site_id   = json["site_id"]
         @player_id = json["id"]
       rescue => e
         if e.respond_to? :response && e.response
@@ -190,7 +180,7 @@ module Badgeville
       @session
     end
 
-    def make_call(method, action, params={})
+    def make_call(method, action, params = {})
       end_point = "#{action.to_s}.json"
       params = add_default_params(method, action, params)
 
@@ -222,7 +212,7 @@ module Badgeville
       end
     end
 
-    def to_query params
+    def to_query(params)
       URI.escape(params.map { |k,v| "#{k.to_s}=#{v.to_s}" }.join("&"))
     end
 
@@ -249,16 +239,17 @@ module Badgeville
     end
 
     def all_pages_for(action, params={})
-      pages = []
+      pages        = []
       current_page = 1
-      total_pages = nil
+      total_pages  = nil
+
       while total_pages.nil? || current_page <= total_pages
         params[:include_totals] = true unless total_pages
-        response  = get_page(action, current_page, params)
+        response = get_page(action, current_page, params)
         pages << response
         if response["paging"]
           current_page = response["paging"]["current_page"].to_i + 1
-          total_pages = response["paging"]["total_pages"].to_i if total_pages.nil?
+          total_pages  = response["paging"]["total_pages"].to_i if total_pages.nil?
         else
           total_pages = 0
         end
