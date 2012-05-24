@@ -1,19 +1,2 @@
 *.gem
-examples/my*
-# rcov generated
-coverage
-
-# rdoc generated
-rdoc
-
-# yard generated
-doc
-.yardoc
-
-# bundler
-.bundle
-
-keys.json
-keys.json.dev
-keys.json.pro
 Gemfile.lock
