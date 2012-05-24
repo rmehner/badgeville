@@ -1,4 +1,3 @@
-
 module Badgeville
   class Reward
     include Badgeville::Helpers

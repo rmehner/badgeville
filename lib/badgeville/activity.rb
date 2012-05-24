@@ -1,6 +1,3 @@
-require 'date'
-require 'badgeville/reward'
-
 module Badgeville
   class Activity
     attr_accessor :verb, :player_id, :user_id, :points, :rewards, :created_at, :meta
