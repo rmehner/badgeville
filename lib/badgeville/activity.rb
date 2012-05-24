@@ -1,24 +1,34 @@
 module Badgeville
   class Activity
-    attr_accessor :verb, :player_id, :user_id, :points, :rewards, :created_at, :meta
+    attr_accessor :verb, :player_id, :user_id, :points
 
-    def initialize(json=nil)
-      if json
-        @verb       = json.delete("verb")
-        @player_id  = json.delete("player_id")
-        @user_id    = json.delete("user_id")
-        @points     = json.delete("points").to_i
-        @created_at = DateTime.parse(json.delete("created_at")).to_time
+    def initialize(json = {})
+      @json      = json
+      @verb      = @json['verb']
+      @player_id = @json['player_id']
+      @user_id   = @json['user_id']
+      @points    = @json['points'].to_i
+    end
 
-        @rewards = json.delete("rewards").map do |award|
-          Reward.new(award)
+    def rewards
+      @rewards ||= @json['rewards'].map {|reward| Reward.new(reward)}
+    end
+
+    def created_at
+      @created_at ||= DateTime.parse(@json['created_at']).to_time
+    end
+
+    def meta
+      known_attributes = [:created_at, :player_id, :points, :rewards, :user_id, :verb]
+      @meta ||= @json.inject({}) do |meta, entry|
+        key   = entry[0].to_sym
+        value = entry[1]
+
+        unless known_attributes.include?(key)
+          meta[key] = value
         end
 
-        @meta = json.inject({}) do |meta, entry|
-          k,v            = entry
-          meta[k.to_sym] = v
-          meta
-        end
+        meta
       end
     end
   end

@@ -8,55 +8,39 @@ describe Badgeville::Client do
   end
 
   describe "#log_activity" do
-    before do
-      @action_name = "commented"
-      @url = "http://" + Badgeville::HOST + ".*activities.json"
-      @result = {"verb" => @action_name,
-        "created_at" => "2011-08-30T12:27:47-07:00",
-        "points" => 0,
-        "player_id" => "4e5d3992c47eed202d00148c",
-        "user_id" => "4e5d3992c47eed202d00148b",
-        "rewards" => []
+    let(:result) do
+      {
+        'verb'       => 'commented',
+        'created_at' => '2011-08-30T12:27:47-07:00',
+        'rewards'    => []
       }
-      @body = "activity[verb]=#{@action_name}"
-      @user_data = "&user=#{@user}&site=example.com"
     end
 
-    context "when no meta data" do
-      before do
-        @body += @user_data
-        stub_http_request(:post, Regexp.new(@url)).with(:body => @body).
-          to_return(:body => @result.to_json)
-        @activity =  @badgeville.log_activity @action_name
-      end
-
-      it "returns an activity object" do
-        @activity.is_a? Badgeville::Activity
-      end
-
-      it "parses response from activity record api call" do
-        @activity.verb.should == "commented"
-        @activity.created_at.iso8601.should == Time.parse(@result["created_at"]).iso8601
-        @activity.points.should == 0
-        @activity.rewards.should be_empty
-        @activity.meta.should be_empty
-      end
+    before(:each) do
+      stub_http_request(
+        :post,
+        /#{Badgeville::PROTOCOL}:\/\/#{Badgeville::HOST}.*activities\.json/
+      ).to_return(
+        body: result.to_json
+      )
     end
 
-    context "with meta data" do
-      before do
-        @team = "myteam"
-        @result["team"] = @team
-        @body += "&activity[team]=#{@team}" + @user_data
+    it 'creates the activity at badgeville' do
+      @badgeville.log_activity 'commented'
+      a_request(
+        :post,
+        /.*#{Badgeville::HOST}.*/
+      ).with(body: 'activity[verb]=commented&user=user&site=example.com').should have_been_made
+    end
 
-        stub_http_request(:post, Regexp.new(@url)).with(:body => @body).
-          to_return(:body => @result.to_json)
-        @activity =  @badgeville.log_activity @action_name, :team => @team
-      end
+    it 'returns an activity' do
+      @badgeville.log_activity('commented').should be_a(Badgeville::Activity)
+    end
 
-      it "parses the meta data as well" do
-        @activity.meta[:team] = @team
-      end
+    it 'initializes the activity with the response' do
+      Badgeville::Activity.should_receive(:new).with(result)
+
+      @badgeville.log_activity 'commented'
     end
   end
 

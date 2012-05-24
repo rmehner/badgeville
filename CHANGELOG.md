@@ -1,3 +1,8 @@
+0.2.0 (May XX, 2012)
+====================
+
+* Activity now lazily loads it's attributes
+
 0.1.1 (May 7, 2012)
 ===================
 
