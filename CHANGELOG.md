@@ -3,6 +3,7 @@
 
 * Activity now lazily loads it's attributes
 * Client now defaults to https
+* Remove deprecated `grayscale_url` from Badgeville::Reward, use `image_url(:grayscale)` instead
 
 0.1.1 (May 7, 2012)
 ===================

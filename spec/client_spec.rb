@@ -130,22 +130,22 @@ describe Badgeville::Client do
   end
 
   describe "#delete" do
+    let(:reward) {stub(:reward, id: 5, earned_at: Time.now)}
+
     before do
-      @mock_reward = Badgeville::Reward.new
-      @mock_reward.id = 5
-      @mock_reward.earned_at = Time.now
       @url = /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*rewards\/5.json/
-      stub_http_request(:delete, @url).to_return(:status => 200)
+      stub_http_request(:delete, @url).to_return(status: 200)
     end
 
     it "succeed for an earned reward" do
-      @badgeville.delete(@mock_reward).should be_true
+      @badgeville.delete(reward).should be_true
     end
 
     it "fails for an un-earned reward (reward definition)" do
-      @mock_reward.earned_at = nil
+      reward.stub(earned_at: nil)
+
       lambda {
-        @badgeville.delete(@mock_reward)
+        @badgeville.delete(reward)
       }.should raise_error(Badgeville::BadgevilleError)
     end
 
@@ -156,9 +156,9 @@ describe Badgeville::Client do
     end
 
     it "handles response error codes" do
-      stub_http_request(:delete, @url).to_return(:status => 500)
+      stub_http_request(:delete, @url).to_return(status: 500)
       lambda {
-        @badgeville.delete(@mock_reward)
+        @badgeville.delete(reward)
       }.should raise_error(Badgeville::BadgevilleError)
     end
   end
