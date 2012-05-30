@@ -61,6 +61,7 @@ module Badgeville
     end
 
     def reward_definitions
+      warn '[DEPRECATED] Please use Badgeville::RewardDefinition.find_by_site instead'
       unless @reward_definitions
         pages               = all_pages_for(:reward_definitions)
         @reward_definitions = pages.inject([]) do |definitions, page|
