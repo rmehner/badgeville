@@ -1,9 +1,28 @@
 module Badgeville
-  class Reward
+  class Reward < Endpoint
     attr_accessor :active, :definition_id, :hint, :id, :message, :name, :tags
     attr_accessor :threshold, :verb
 
     attr_writer :image_url
+
+    def self.find_by_player(attributes)
+      if (!attributes[:player_id]) && (!attributes[:email] || !attributes[:site])
+        raise ArgumentError.new('You have to provide a player_id or a site and email')
+      end
+
+      user_info = {}
+      if attributes[:player_id]
+        user_info[:player_id] = attributes[:player_id]
+      else
+        user_info[:site]  = attributes[:site]
+        user_info[:email] = attributes[:email]
+      end
+
+      response = client.get_all('rewards.json', user_info)
+      response.inject([]) do |rewards, reward|
+        rewards << new(reward)
+      end
+    end
 
     def initialize(json = {})
       @json = json

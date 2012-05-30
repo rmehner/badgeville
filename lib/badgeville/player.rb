@@ -21,7 +21,7 @@ module Badgeville
       end
 
       response = client.post(
-        '/players.json',
+        'players.json',
         {
           email: attributes.delete(:email),
           site: attributes.delete(:site)

@@ -1,4 +1,10 @@
 module Badgeville
+
+  #
+  # All methods in this module are deemed deprecated and will be removed
+  # in a future release. Methods with proper alternatives throw
+  # a warning with a hint for the new method.
+  #
   module DeprecatedClientMethods
     attr_accessor :user, :site, :player_id, :site_id
 
@@ -65,6 +71,7 @@ module Badgeville
     end
 
     def get_rewards
+      warn '[DEPRECATED] Please use Badgeville::Reward.find_by_player instead'
       begin
         pages = all_pages_for(:rewards)
         pages.inject([]) do |rewards, page|

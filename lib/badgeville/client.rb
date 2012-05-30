@@ -28,24 +28,56 @@ module Badgeville
     end
 
     def get(endpoint, params = {})
-      begin
-        response = session[endpoint].get(params: params)
-        JSON.parse(response)['data']
-      rescue RestClient::ResourceNotFound => e
-        nil
+      response = request!(:get, endpoint, params)
+      response ? response['data'] : nil
+    end
+
+    def get_all(endpoint, params = {})
+      data              = []
+      current_page      = 1
+      total_pages       = nil
+      params[:per_page] = 50
+
+      while total_pages.nil? || current_page <= total_pages
+        params[:include_totals] = true unless total_pages
+        response = request!(:get, endpoint, params.merge(page: current_page))
+
+        data << response['data']
+
+        if response['paging']
+          current_page = response['paging']['current_page'].to_i + 1
+          total_pages  = response['paging']['total_pages'].to_i if total_pages.nil?
+        else
+          total_pages = 0
+        end
       end
+
+      data.flatten
     end
 
-    def post(endpoint, body = {})
-      response = session[endpoint].post(body.to_json, content_type: :json, accept: :json)
-      JSON.parse(response)
+    def post(endpoint, params = {})
+      request!(:post, endpoint, params)
     end
 
-    def put(endpoint, body = {})
-      session[endpoint].put(body.to_json, content_type: :json)
+    def put(endpoint, params = {})
+      request!(:put, endpoint, params)
     end
 
     private
+
+      def request!(method, endpoint, params = {})
+        begin
+          if method == :get
+            response = session[endpoint].get(params: params)
+          else
+            response = session[endpoint].send(method, params.to_json, content_type: :json, accept: :json)
+          end
+
+          response.length == 0 ? nil : JSON.parse(response)
+        rescue RestClient::ResourceNotFound => e
+          nil
+        end
+      end
 
       def session
         if @session.nil?

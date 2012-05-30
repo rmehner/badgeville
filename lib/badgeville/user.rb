@@ -7,12 +7,12 @@ module Badgeville
     end
 
     def self.create(attributes = {})
-      response = client.post('/users.json', user: attributes)
+      response = client.post('users.json', user: attributes)
       new(response)
     end
 
     def self.find(id_or_email)
-      response = client.get("/users/#{id_or_email}.json")
+      response = client.get("users/#{id_or_email}.json")
       response ? new(response) : nil
     end
 

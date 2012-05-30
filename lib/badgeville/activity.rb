@@ -16,7 +16,7 @@ module Badgeville
       end
 
       response = client.post(
-        '/activities.json',
+        'activities.json',
         user_info.merge(
           activity: attributes.reject {|k, v| [:player_id, :site, :email].include?(k)}
         )

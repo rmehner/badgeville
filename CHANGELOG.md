@@ -2,6 +2,7 @@
 ====================
 
 * BREAKS BACKWARDS COMPATIBILITY
+* DOES NOT INCLUDE PROPER ERROR HANDLING YET!
 * Activity now lazily loads its attributes
 * Client now defaults to https
 * Remove deprecated `grayscale_url` from Badgeville::Reward, use `image_url(:grayscale)` instead
@@ -16,6 +17,8 @@
   * `create` to create an activity for the player by the player_id or site and email
 * Deprecated `Badgeville::Client.log_activity` in favor of `Badgeville::Activity.create`
 * Moved deprecated methods to a separate module `DeprecatedClientMethods`.
+* Badgeville::Reward enhanced with:
+  * `find_by_player` to get all the rewards for a player (reads through pagination)
 
 0.1.1 (May 7, 2012)
 ===================
