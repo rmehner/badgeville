@@ -1,6 +1,29 @@
 module Badgeville
-  class Activity
+  class Activity < Endpoint
     attr_accessor :verb, :player_id, :user_id, :points
+
+    def self.create(attributes)
+      if (!attributes[:player_id]) && (!attributes[:email] || !attributes[:site])
+        raise ArgumentError.new('You have to provide a player_id or a site and email')
+      end
+
+      user_info = {}
+      if attributes[:player_id]
+        user_info[:player_id] = attributes[:player_id]
+      else
+        user_info[:site]  = attributes[:site]
+        user_info[:email] = attributes[:email]
+      end
+
+      response = client.post(
+        '/activities.json',
+        user_info.merge(
+          activity: attributes.reject {|k, v| [:player_id, :site, :email].include?(k)}
+        )
+      )
+
+      new(response)
+    end
 
     def initialize(json = {})
       @json      = json

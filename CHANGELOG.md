@@ -1,9 +1,21 @@
-0.2.0 (May XX, 2012)
+0.4.0 (May XX, 2012)
 ====================
 
-* Activity now lazily loads it's attributes
+* BREAKS BACKWARDS COMPATIBILITY
+* Activity now lazily loads its attributes
 * Client now defaults to https
 * Remove deprecated `grayscale_url` from Badgeville::Reward, use `image_url(:grayscale)` instead
+* Badgeville::Player implemented with:
+  * `find_by_email_and_site` to find a player by its user email and the site
+  * `create` to create a player at Badgeville (with `site_id` and `user_id` or `email` and `site`)
+  * `update` to update a player by the player_id
+* Badgeville::User implemented with:
+  * `find` which takes the user id or his email and returns a Badgeville::User object
+  * `create` to create a user on the Badgeville network
+* Badgeville::Activity enhanced with:
+  * `create` to create an activity for the player by the player_id or site and email
+* Deprecated `Badgeville::Client.log_activity` in favor of `Badgeville::Activity.create`
+* Moved deprecated methods to a separate module `DeprecatedClientMethods`.
 
 0.1.1 (May 7, 2012)
 ===================
