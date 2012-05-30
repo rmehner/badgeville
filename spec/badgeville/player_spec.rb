@@ -159,11 +159,11 @@ describe Badgeville::Player do
     end
 
     it 'handles the error when the email is already taken' do
-      pending
+      pending('TODO: Handle all errors. First find out how Badgeville responds')
     end
 
     it 'handles RestClient errors like Timeouts' do
-      pending
+      pending('TODO: Handle all errors. First find out how Badgeville responds')
     end
   end
 
@@ -182,7 +182,7 @@ describe Badgeville::Player do
     end
 
     it 'returns the errors why the update was not successful' do
-      pending
+      pending('TODO: Handle all errors. First find out how Badgeville responds')
     end
   end
 

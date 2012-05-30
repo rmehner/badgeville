@@ -80,7 +80,7 @@ describe Badgeville::Activity do
     end
 
     it 'handles the errors' do
-      pending
+      pending('TODO: Handle all errors. First find out how Badgeville responds')
     end
   end
 
