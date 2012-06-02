@@ -80,10 +80,13 @@ module Badgeville
       end
 
       def session
-        if @session.nil?
+        unless @session
           base_url = "#{@protocol}://#{@host}/api/berlin/#{@private_key}"
-          @session = RestClient::Resource.new base_url,
-            :timeout => @timeout, :open_timeout => @timeout
+          @session = RestClient::Resource.new(
+            base_url,
+            timeout: @timeout,
+            open_timeout: @timeout
+          )
         end
         @session
       end
