@@ -20,12 +20,16 @@ module Badgeville
   # Timeout
   class NotAvailable < Error; end
 
+  # invalid JSON returned etc.
+  class ParseError < Error; end
+
+  # 403
+  class Forbidden < Error; end
+
   # 404
   class NotFound < Error; end
 
   # 500
   class ServerError < Error; end
 
-  # invalid JSON returned etc.
-  class ParseError < Error; end
 end

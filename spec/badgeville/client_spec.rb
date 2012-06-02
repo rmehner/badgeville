@@ -39,5 +39,13 @@ describe Badgeville::Client do
         Badgeville.client.get('/rewards.json')
       }.to raise_error Badgeville::ParseError
     end
+
+    it 'raises a Badgeville::Forbidden if Badgeville responds with 403' do
+      stubbed_request.to_return(status: 403, body: '{{"errors":[{"error":"access denied"}]}')
+
+      expect {
+        Badgeville.client.get('/rewards.json')
+      }.to raise_error Badgeville::Forbidden
+    end
   end
 end

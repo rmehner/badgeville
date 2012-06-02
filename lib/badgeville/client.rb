@@ -73,6 +73,8 @@ module Badgeville
           raise Badgeville::NotFound.new(e)
         rescue RestClient::InternalServerError => e
           raise Badgeville::ServerError.new(e)
+        rescue RestClient::Forbidden => e
+          raise Badgeville::Forbidden.new(e)
         rescue JSON::ParserError => e
           raise Badgeville::ParseError.new(e)
         end
