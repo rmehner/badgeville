@@ -13,7 +13,6 @@ module Badgeville
       # Required Parameters
       @site        = opts['site']
       @private_key = opts['private_key']
-      @public_key  = opts['public_key']
       @timeout     = opts['timeout'] || TIMEOUT_SECS
       @host        = opts['host'] || HOST
       @protocol    = opts['protocol'] || PROTOCOL
