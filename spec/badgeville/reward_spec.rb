@@ -104,17 +104,23 @@ describe Badgeville::Reward do
     end
 
     it 'raises an ArgumentError when player_id or site and email are not provided' do
-      -> {
+      expect {
         Badgeville::Reward.find_by_player({email: 'user@example.org'})
-      }.should raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
+      }.to raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
 
-      -> {
+      expect {
         Badgeville::Reward.find_by_player({site: 'example.org'})
-      }.should raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
+      }.to raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
     end
 
-    it 'handles some errors' do
-      pending('TODO: Handle all errors. First find out how Badgeville responds')
+    it 'returns an empty array if Badgeville returns with 404' do
+      stub_request(:get, /.*\/rewards\.json/).to_return(
+        status: 404
+      )
+
+      rewards = Badgeville::Reward.find_by_player({player_id: 'PLAYER_ID'})
+
+      rewards.should be_empty
     end
   end
 

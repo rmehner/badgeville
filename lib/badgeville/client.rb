@@ -67,8 +67,14 @@ module Badgeville
           end
 
           response.length == 0 ? nil : JSON.parse(response)
+        rescue RestClient::RequestTimeout => e
+          raise Badgeville::NotAvailable.new(e)
         rescue RestClient::ResourceNotFound => e
-          nil
+          raise Badgeville::NotFound.new(e)
+        rescue RestClient::InternalServerError => e
+          raise Badgeville::ServerError.new(e)
+        rescue JSON::ParserError => e
+          raise Badgeville::ParseError.new(e)
         end
       end
 

@@ -32,7 +32,11 @@ module Badgeville
     end
 
     def self.find_by_email_and_site(email, site)
-      response = client.get('/players/info.json', {email: email, site: site})
+      begin
+        response = client.get('/players/info.json', {email: email, site: site})
+      rescue Badgeville::NotFound
+      end
+
       response ? new(response) : nil
     end
 

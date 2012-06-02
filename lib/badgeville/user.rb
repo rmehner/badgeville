@@ -12,7 +12,11 @@ module Badgeville
     end
 
     def self.find(id_or_email)
-      response = client.get("users/#{id_or_email}.json")
+      begin
+        response = client.get("users/#{id_or_email}.json")
+      rescue Badgeville::NotFound
+      end
+
       response ? new(response) : nil
     end
 

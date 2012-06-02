@@ -18,9 +18,13 @@ module Badgeville
         user_info[:email] = attributes[:email]
       end
 
-      response = client.get_all('rewards.json', user_info)
-      response.inject([]) do |rewards, reward|
-        rewards << new(reward)
+      begin
+        response = client.get_all('rewards.json', user_info)
+        response.inject([]) do |rewards, reward|
+          rewards << new(reward)
+        end
+      rescue Badgeville::NotFound
+        []
       end
     end
 

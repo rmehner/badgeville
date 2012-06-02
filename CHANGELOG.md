@@ -21,6 +21,7 @@
   * `find_by_player` to get all the rewards for a player (reads through pagination)
 * Badgeville::RewardDefinition implemented with:
   * `find_by_site` to get all the reward definitions for a site (returned as Badgeville::Reward)
+* Badgeville::Client now raises correct Errors when RestClient raises an error
 
 0.1.1 (May 7, 2012)
 ===================

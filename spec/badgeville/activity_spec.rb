@@ -63,13 +63,13 @@ describe Badgeville::Activity do
     end
 
     it 'raises an ArgumentError when player_id or site and email is not given' do
-      -> {
+      expect {
         Badgeville::Activity.create(site: 'example.org')
-      }.should raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
+      }.to raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
 
-      -> {
+      expect {
         Badgeville::Activity.create(email: 'user@example.org')
-      }.should raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
+      }.to raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
     end
 
     it 'returns the activity object' do

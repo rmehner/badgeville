@@ -15,9 +15,9 @@ describe Badgeville do
     end
 
     it 'raises an error when no client was configured before' do
-      -> {
+      expect {
         Badgeville.client
-      }.should raise_error
+      }.to raise_error
     end
 
     it 'returns the configured client' do
