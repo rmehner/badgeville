@@ -14,10 +14,9 @@ module Badgeville
     def self.find(id_or_email)
       begin
         response = client.get("users/#{id_or_email}.json")
+        new(response)
       rescue Badgeville::NotFound
       end
-
-      response ? new(response) : nil
     end
 
     def initialize(attributes = {})
