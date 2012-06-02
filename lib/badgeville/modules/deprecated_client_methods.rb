@@ -6,7 +6,13 @@ module Badgeville
   # a warning with a hint for the new method.
   #
   module DeprecatedClientMethods
-    attr_accessor :user, :site, :player_id, :site_id
+    attr_accessor :user, :site, :player_id, :site_id, :debug
+
+    def debug=(flag)
+      log_file       = flag ? "stdout" : nil
+      RestClient.log = log_file
+      @debug         = flag
+    end
 
     def create_player(opts = {})
       #try to see if player already exists

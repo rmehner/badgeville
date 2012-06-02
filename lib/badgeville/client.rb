@@ -4,7 +4,7 @@ module Badgeville
     HOST         = 'sandbox.v2.badgeville.com'
     PROTOCOL     = 'https'
 
-    attr_accessor :timeout, :debug
+    attr_accessor :timeout
 
     include Helpers
     include DeprecatedClientMethods
@@ -19,12 +19,6 @@ module Badgeville
       @protocol    = opts['protocol'] || PROTOCOL
       @user        = email
       @per_page    = opts['per_page']
-    end
-
-    def debug=(flag)
-      log_file       = flag ? "stdout" : nil
-      RestClient.log = log_file
-      @debug         = flag
     end
 
     def get(endpoint, params = {})
