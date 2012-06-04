@@ -2,7 +2,8 @@ module Badgeville
   class Error < StandardError
     attr_accessor :data
 
-    def initialize(data)
+    def initialize(message, data)
+      super(message)
       @data = data
     end
   end
@@ -12,7 +13,7 @@ module Badgeville
     attr_accessor :code
 
     def initialize(error_code = nil, data = nil)
-      super(data.to_s)
+      super(data.to_s, data)
       @code = error_code
     end
   end
@@ -34,5 +35,4 @@ module Badgeville
 
   # 500
   class ServerError < Error; end
-
 end

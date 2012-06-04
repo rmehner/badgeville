@@ -68,17 +68,17 @@ module Badgeville
 
           response.length == 0 ? nil : JSON.parse(response)
         rescue RestClient::RequestTimeout => e
-          raise NotAvailable.new(e)
+          raise NotAvailable.new('[Badgeville]: Service is currently not available', e)
         rescue RestClient::ResourceNotFound => e
-          raise NotFound.new(e)
+          raise NotFound.new('[Badgeville]: Could not find resource', e)
         rescue RestClient::InternalServerError => e
-          raise ServerError.new(e)
+          raise ServerError.new('[Badgeville]: Internal server error', e)
         rescue RestClient::Forbidden => e
-          raise Forbidden.new(e)
+          raise Forbidden.new('[Badgeville]: Access denied', e)
         rescue RestClient::UnprocessableEntity => e
-          raise Unprocessable.new(e)
+          raise Unprocessable.new('[Badgeville]: Unprocessable entity', e)
         rescue JSON::ParserError => e
-          raise ParseError.new(e)
+          raise ParseError.new('[Badgeville]: JSON parse error', e)
         end
       end
 
