@@ -5,27 +5,12 @@ module Badgeville
 
     attr_writer :image_url
 
-    def self.find_by_player(attributes)
-      if (!attributes[:player_id]) && (!attributes[:email] || !attributes[:site])
-        raise ArgumentError.new('You have to provide a player_id or a site and email')
-      end
+    def self.find_by_player_id(player_id)
+      get_all_rewards(player_id: player_id)
+    end
 
-      user_info = {}
-      if attributes[:player_id]
-        user_info[:player_id] = attributes[:player_id]
-      else
-        user_info[:site]  = attributes[:site]
-        user_info[:email] = attributes[:email]
-      end
-
-      begin
-        response = client.get_all('rewards.json', user_info)
-        response.inject([]) do |rewards, reward|
-          rewards << new(reward)
-        end
-      rescue Badgeville::NotFound
-        []
-      end
+    def self.find_by_email_and_site(email, site)
+      get_all_rewards(email: email, site: site)
     end
 
     def initialize(json = {})
@@ -51,6 +36,25 @@ module Badgeville
     end
 
     private
+
+      def self.get_all_rewards(attributes)
+        user_info = {}
+        if attributes[:player_id]
+          user_info[:player_id] = attributes[:player_id]
+        else
+          user_info[:site]  = attributes[:site]
+          user_info[:email] = attributes[:email]
+        end
+
+        begin
+          response = client.get_all('rewards.json', user_info)
+          response.inject([]) do |rewards, reward|
+            rewards << new(reward)
+          end
+        rescue Badgeville::NotFound
+          []
+        end
+      end
 
       def init_from(json)
         ['name', 'active', 'hint', 'image_url', 'message'].each do |key|

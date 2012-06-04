@@ -18,7 +18,8 @@
 * Deprecated `Badgeville::Client.log_activity` in favor of `Badgeville::Activity.create`
 * Moved deprecated methods to a separate module `DeprecatedClientMethods`.
 * Badgeville::Reward enhanced with:
-  * `find_by_player` to get all the rewards for a player (reads through pagination)
+  * `find_by_player_id` to get all the rewards for a player by the player_id (reads through pagination)
+  * `find_by_email_and_site` to get all the rewards for a player by email and site (reads through pagination)
 * Badgeville::RewardDefinition implemented with:
   * `find_by_site` to get all the reward definitions for a site (returned as Badgeville::Reward)
 * Badgeville::Client now raises correct Errors when RestClient raises an error

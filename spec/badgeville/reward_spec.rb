@@ -47,7 +47,7 @@ describe Badgeville::Reward do
     }
   end
 
-  describe 'find_by_player' do
+  describe 'find_by_player_id' do
     before(:each) do
       stub_request(:get, /.*\/rewards\.json/).to_return(
         status: 200,
@@ -56,18 +56,15 @@ describe Badgeville::Reward do
     end
 
     it 'finds every reward for the player by the player_id' do
-      Badgeville::Reward.find_by_player({player_id: 'PLAYER_ID'})
+      Badgeville::Reward.find_by_player_id('PLAYER_ID')
 
       a_request(:get, /.*\/rewards\.json/).with(
-        query: {'player_id' => 'PLAYER_ID', 'page' => '1', 'per_page' => '50', 'include_totals' => 'true'}
-      ).should have_been_made
-    end
-
-    it 'finds every reward for the player by the email and site' do
-      Badgeville::Reward.find_by_player({site: 'example.org', email: 'user@example.org'})
-
-      a_request(:get, /.*\/rewards\.json/).with(
-        query: {'site' => 'example.org', 'email' => 'user@example.org', 'page' => '1', 'per_page' => '50', 'include_totals' => 'true'}
+        query: {
+          'player_id'      => 'PLAYER_ID',
+          'page'           => '1',
+          'per_page'       => '50',
+          'include_totals' => 'true'
+        }
       ).should have_been_made
     end
 
@@ -77,13 +74,13 @@ describe Badgeville::Reward do
         body: {data: []}.to_json
       )
 
-      rewards = Badgeville::Reward.find_by_player({player_id: 'PLAYER_ID'})
+      rewards = Badgeville::Reward.find_by_player_id('PLAYER_ID')
 
       rewards.should be_empty
     end
 
     it 'returns an array of reward objects' do
-      rewards = Badgeville::Reward.find_by_player({player_id: 'PLAYER_ID'})
+      rewards = Badgeville::Reward.find_by_player_id('PLAYER_ID')
       rewards.first.should be_a(Badgeville::Reward)
       rewards.first.name.should == 'A Way with Words'
     end
@@ -95,7 +92,7 @@ describe Badgeville::Reward do
         {body: {data: [reward_json.merge(name: 'Eduard Khil')], paging: {current_page: 3, total_pages: 3}}.to_json},
       )
 
-      rewards = Badgeville::Reward.find_by_player({player_id: 'PLAYER_ID'})
+      rewards = Badgeville::Reward.find_by_player_id('PLAYER_ID')
 
       rewards.should have(3).items
       rewards[0].name.should == 'A Way with Words'
@@ -103,14 +100,69 @@ describe Badgeville::Reward do
       rewards[2].name.should == 'Eduard Khil'
     end
 
-    it 'raises an ArgumentError when player_id or site and email are not provided' do
-      expect {
-        Badgeville::Reward.find_by_player({email: 'user@example.org'})
-      }.to raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
+    it 'returns an empty array if Badgeville returns with 404' do
+      stub_request(:get, /.*\/rewards\.json/).to_return(
+        status: 404
+      )
 
-      expect {
-        Badgeville::Reward.find_by_player({site: 'example.org'})
-      }.to raise_error(ArgumentError, 'You have to provide a player_id or a site and email')
+      rewards = Badgeville::Reward.find_by_player_id('PLAYER_ID')
+
+      rewards.should be_empty
+    end
+  end
+
+  describe 'find_by_email_and_site' do
+    before(:each) do
+      stub_request(:get, /.*\/rewards\.json/).to_return(
+        status: 200,
+        body: {data: [reward_json]}.to_json
+      )
+    end
+
+    it 'finds every reward for the player by the email and site' do
+      Badgeville::Reward.find_by_email_and_site('user@example.org', 'example.org')
+
+      a_request(:get, /.*\/rewards\.json/).with(
+        query: {
+          'site'           => 'example.org',
+          'email'          => 'user@example.org',
+          'page'           => '1',
+          'per_page'       => '50',
+          'include_totals' => 'true'
+        }
+      ).should have_been_made
+    end
+
+    it 'returns an empty array if no rewards could be found' do
+      stub_request(:get, /.*\/rewards\.json/).to_return(
+        status: 200,
+        body: {data: []}.to_json
+      )
+
+      rewards = Badgeville::Reward.find_by_email_and_site('user@example.org', 'example.org')
+
+      rewards.should be_empty
+    end
+
+    it 'returns an array of reward objects' do
+      rewards = Badgeville::Reward.find_by_email_and_site('user@example.org', 'example.org')
+      rewards.first.should be_a(Badgeville::Reward)
+      rewards.first.name.should == 'A Way with Words'
+    end
+
+    it 'gets ALL the rewards with pagination' do
+      stub_request(:get, /.*\/rewards\.json/).to_return(
+        {body: {data: [reward_json], paging: {current_page: 1, total_pages: 3}}.to_json},
+        {body: {data: [reward_json.merge(name: 'Typinghero')], paging: {current_page: 2, total_pages: 3}}.to_json},
+        {body: {data: [reward_json.merge(name: 'Eduard Khil')], paging: {current_page: 3, total_pages: 3}}.to_json},
+      )
+
+      rewards = Badgeville::Reward.find_by_email_and_site('user@example.org', 'example.org')
+
+      rewards.should have(3).items
+      rewards[0].name.should == 'A Way with Words'
+      rewards[1].name.should == 'Typinghero'
+      rewards[2].name.should == 'Eduard Khil'
     end
 
     it 'returns an empty array if Badgeville returns with 404' do
@@ -118,7 +170,7 @@ describe Badgeville::Reward do
         status: 404
       )
 
-      rewards = Badgeville::Reward.find_by_player({player_id: 'PLAYER_ID'})
+      rewards = Badgeville::Reward.find_by_email_and_site('user@example.org', 'example.org')
 
       rewards.should be_empty
     end
