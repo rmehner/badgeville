@@ -13,7 +13,7 @@ module Badgeville
       # Required Parameters
       @site        = opts['site']
       @private_key = opts['private_key']
-      @timeout     = opts['timeout'] || TIMEOUT_SECS
+      self.timeout = opts['timeout'] || TIMEOUT_SECS
       @host        = opts['host'] || HOST
       @protocol    = opts['protocol'] || PROTOCOL
       @user        = email
@@ -85,8 +85,8 @@ module Badgeville
           base_url = "#{@protocol}://#{@host}/api/berlin/#{@private_key}"
           @session = RestClient::Resource.new(
             base_url,
-            timeout: @timeout,
-            open_timeout: @timeout
+            timeout: timeout,
+            open_timeout: timeout
           )
         end
         @session
