@@ -29,6 +29,9 @@ module Badgeville
   # 404
   class NotFound < Error; end
 
+  # 422
+  class Unprocessable < Error; end
+
   # 500
   class ServerError < Error; end
 

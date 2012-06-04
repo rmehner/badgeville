@@ -75,6 +75,8 @@ module Badgeville
           raise ServerError.new(e)
         rescue RestClient::Forbidden => e
           raise Forbidden.new(e)
+        rescue RestClient::UnprocessableEntity => e
+          raise Unprocessable.new(e)
         rescue JSON::ParserError => e
           raise ParseError.new(e)
         end

@@ -47,5 +47,13 @@ describe Badgeville::Client do
         Badgeville.client.get('/rewards.json')
       }.to raise_error Badgeville::Forbidden
     end
+
+    it 'raises a Badgeville::Unprocessable if Badgeville responds with 422' do
+      stubbed_request.to_return(status: 422, body: '{{"limit":["exceeded"]}')
+
+      expect {
+        Badgeville.client.get('/rewards.json')
+      }.to raise_error Badgeville::Unprocessable
+    end
   end
 end
