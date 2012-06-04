@@ -2,7 +2,7 @@ module Badgeville
   class Error < StandardError
     attr_accessor :data
 
-    def initialize(message, data)
+    def initialize(message, data = nil)
       super(message)
       @data = data
     end
