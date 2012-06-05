@@ -5,8 +5,23 @@ Badgeville API
 
 Client for Badgeville API http://rules.badgeville.com/
 
-Usage
---------
+Note
+====
+
+We're in the process of rewriting this gem to have more features in a
+cleaner and well tested way.
+
+We work directly in master, so if you're brave and want to help, load the
+master version in your app and report back if something breaks / doesn't work
+as advertised. We're using master in one of our production apps and it works
+fine so far.
+
+If you want to have a _stable_ version, use the released one that is available
+on rubygems.org. We'll keep the deprecated usage for the next release, but will
+remove that eventually in near future.
+
+Deprecated Usage
+----------------
 First, checkout the examples folder. TL;DR:
 
 * create connection object with your api_key, and secret.

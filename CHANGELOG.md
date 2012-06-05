@@ -3,6 +3,7 @@
 
 * BREAKS BACKWARDS COMPATIBILITY
 * DOES NOT INCLUDE PROPER ERROR HANDLING YET!
+
 * Activity now lazily loads its attributes
 * Client now defaults to https
 * Remove deprecated `grayscale_url` from Badgeville::Reward, use `image_url(:grayscale)` instead
