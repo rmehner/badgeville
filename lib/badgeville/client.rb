@@ -4,20 +4,30 @@ module Badgeville
     HOST         = 'sandbox.v2.badgeville.com'
     PROTOCOL     = 'https'
 
-    attr_accessor :timeout
+    attr_accessor :private_key, :per_page
+    attr_writer   :timeout, :host, :protocol
 
     include Helpers
     include DeprecatedClientMethods
 
     def initialize(email, opts = {})
-      # Required Parameters
-      @site        = opts['site']
-      @private_key = opts['private_key']
-      self.timeout = opts['timeout'] || TIMEOUT_SECS
-      @host        = opts['host'] || HOST
-      @protocol    = opts['protocol'] || PROTOCOL
-      @user        = email
-      @per_page    = opts['per_page']
+      @user = email
+
+      opts.each do |option, value|
+        send("#{option}=", value)
+      end
+    end
+
+    def timeout
+      @timeout ||= TIMEOUT_SECS
+    end
+
+    def protocol
+      @protocol ||= PROTOCOL
+    end
+
+    def host
+      @host ||= HOST
     end
 
     def get(endpoint, params = {})
@@ -84,7 +94,7 @@ module Badgeville
 
       def session
         unless @session
-          base_url = "#{@protocol}://#{@host}/api/berlin/#{@private_key}"
+          base_url = "#{protocol}://#{host}/api/berlin/#{private_key}"
           @session = RestClient::Resource.new(
             base_url,
             timeout: timeout,

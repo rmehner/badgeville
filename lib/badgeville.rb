@@ -14,7 +14,15 @@ require 'badgeville/client'
 
 module Badgeville
   def self.configure(opts = {})
-    self.client = Badgeville::Client.new('', opts)
+    self.client = Client.new('')
+
+    if block_given?
+      yield self.client
+    else
+      opts.each do |option, value|
+        self.client.send("#{option}=", value)
+      end
+    end
   end
 
   def self.client=(client)
