@@ -37,17 +37,9 @@ module Badgeville
 
     private
 
-      def self.get_all_rewards(attributes)
-        user_info = {}
-        if attributes[:player_id]
-          user_info[:player_id] = attributes[:player_id]
-        else
-          user_info[:site]  = attributes[:site]
-          user_info[:email] = attributes[:email]
-        end
-
+      def self.get_all_rewards(player_info)
         begin
-          response = client.get_all('rewards.json', user_info)
+          response = client.get_all('rewards.json', player_info)
           response.inject([]) do |rewards, reward|
             rewards << new(reward)
           end
