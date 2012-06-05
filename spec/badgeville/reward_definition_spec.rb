@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Badgeville::RewardDefinition do
   before(:each) do
-    Badgeville.configure(private_api_key: 'PRIVATE_API_KEY')
+    Badgeville.configure(private_key: 'PRIVATE_API_KEY')
   end
 
   let(:reward_json) do

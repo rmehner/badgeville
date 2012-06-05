@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Badgeville::Client do
   before(:each) do
-    Badgeville.configure(private_api_key: 'API_KEY')
+    Badgeville.configure(private_key: 'API_KEY')
   end
 
   describe 'request!' do
