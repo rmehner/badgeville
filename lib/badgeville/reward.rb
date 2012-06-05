@@ -5,12 +5,14 @@ module Badgeville
 
     attr_writer :image_url
 
-    def self.find_by_player_id(player_id)
-      get_all_rewards(player_id: player_id)
-    end
+    class << self
+      def find_by_player_id(player_id)
+        get_all_rewards(player_id: player_id)
+      end
 
-    def self.find_by_email_and_site(email, site)
-      get_all_rewards(email: email, site: site)
+      def find_by_email_and_site(email, site)
+        get_all_rewards(email: email, site: site)
+      end
     end
 
     def initialize(json = {})

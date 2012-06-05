@@ -11,44 +11,46 @@ module Badgeville
       attr_accessor attr
     end
 
-    def self.create(attributes)
-      if (attributes[:email] && !attributes[:site]) || (!attributes[:email] && attributes[:site])
-        raise ArgumentError.new('You have to provide either user_id and site_id or email and site')
-      end
+    class << self
+      def create(attributes)
+        if (attributes[:email] && !attributes[:site]) || (!attributes[:email] && attributes[:site])
+          raise ArgumentError.new('You have to provide either user_id and site_id or email and site')
+        end
 
-      if (attributes[:site_id] && !attributes[:user_id]) || (!attributes[:site_id] && attributes[:user_id])
-        raise ArgumentError.new('You have to provide either user_id and site_id or email and site')
-      end
+        if (attributes[:site_id] && !attributes[:user_id]) || (!attributes[:site_id] && attributes[:user_id])
+          raise ArgumentError.new('You have to provide either user_id and site_id or email and site')
+        end
 
-      response = client.post(
-        'players.json',
-        {
-          email: attributes.delete(:email),
-          site: attributes.delete(:site)
-        }.merge(player: attributes)
-      )
+        response = client.post(
+          'players.json',
+          {
+            email: attributes.delete(:email),
+            site: attributes.delete(:site)
+          }.merge(player: attributes)
+        )
 
-      new(response)
-    end
-
-    def self.find_by_email_and_site(email, site)
-      begin
-        response = client.get('/players/info.json', {email: email, site: site})
         new(response)
-      rescue Badgeville::NotFound
       end
-    end
 
-    def self.find_by_id(id)
-      begin
-        response = client.get("/players/#{id}.json")
-        new(response)
-      rescue Badgeville::NotFound
+      def find_by_email_and_site(email, site)
+        begin
+          response = client.get('/players/info.json', {email: email, site: site})
+          new(response)
+        rescue Badgeville::NotFound
+        end
       end
-    end
 
-    def self.update(id, attributes = {})
-      client.put("/players/#{id}.json", player: attributes)
+      def find_by_id(id)
+        begin
+          response = client.get("/players/#{id}.json")
+          new(response)
+        rescue Badgeville::NotFound
+        end
+      end
+
+      def update(id, attributes = {})
+        client.put("/players/#{id}.json", player: attributes)
+      end
     end
 
     def initialize(attributes = {})
