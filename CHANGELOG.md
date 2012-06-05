@@ -24,6 +24,7 @@
 * Badgeville::RewardDefinition implemented with:
   * `find_by_site` to get all the reward definitions for a site (returned as Badgeville::Reward)
 * Badgeville::Client now raises correct Errors when RestClient raises an error
+* Deprecated Badgeville::Client.public_key= as we don't need the public key anyway
 
 0.1.1 (May 7, 2012)
 ===================

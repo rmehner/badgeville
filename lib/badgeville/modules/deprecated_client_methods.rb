@@ -14,6 +14,10 @@ module Badgeville
       @debug         = flag
     end
 
+    def public_key=(public_key)
+      warn '[DEPRECATED] public_key= is deprecated as it is not used anyway'
+    end
+
     def create_player(opts = {})
       #try to see if player already exists
       begin
