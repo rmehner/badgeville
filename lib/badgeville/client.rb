@@ -7,7 +7,6 @@ module Badgeville
     attr_accessor :private_key, :per_page
     attr_writer   :timeout, :host, :protocol
 
-    include Helpers
     include DeprecatedClientMethods
 
     def initialize(email, opts = {})
