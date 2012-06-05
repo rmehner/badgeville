@@ -9,6 +9,7 @@
 * Remove deprecated `grayscale_url` from Badgeville::Reward, use `image_url(:grayscale)` instead
 * Badgeville::Player implemented with:
   * `find_by_email_and_site` to find a player by its user email and the site
+  * `find_by_id` to find a player by its id
   * `create` to create a player at Badgeville (with `site_id` and `user_id` or `email` and `site`)
   * `update` to update a player by the player_id
 * Badgeville::User implemented with:

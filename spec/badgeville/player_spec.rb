@@ -69,7 +69,7 @@ describe Badgeville::Player do
 
       a_request(
         :get,
-        /#{Badgeville::Client::PROTOCOL}:\/\/#{Badgeville::Client::HOST}.*players/
+        /.*players/
       ).should have_been_made
     end
 
@@ -91,6 +91,38 @@ describe Badgeville::Player do
         'robin@coding-robin.de',
         'example.org'
       ).should be_nil
+    end
+  end
+
+  describe '.find_by_id' do
+    before(:each) do
+      stub_request(:get, /.*players\/PLAYER_ID\.json/).to_return(
+        status: 200,
+        body: player_json.to_json
+      )
+    end
+
+    it 'finds the player info from Badgeville' do
+      Badgeville::Player.find_by_id('PLAYER_ID')
+
+      a_request(
+        :get,
+        /.*players\/PLAYER_ID\.json/
+      ).should have_been_made
+    end
+
+    it 'initializes the player with the returned JSON' do
+      player = Badgeville::Player.find_by_id('PLAYER_ID')
+
+      player.id.should == '2769b93e81ecd9cf242afb1f884783c5'
+    end
+
+    it 'returns nil if the player could not be found' do
+      stub_request(:get, /.*players\/PLAYER_ID\.json/).to_return(
+        status: 404
+      )
+
+      Badgeville::Player.find_by_id('PLAYER_ID').should be_nil
     end
   end
 

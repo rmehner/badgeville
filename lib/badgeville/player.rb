@@ -39,6 +39,14 @@ module Badgeville
       end
     end
 
+    def self.find_by_id(id)
+      begin
+        response = client.get("/players/#{id}.json")
+        new(response)
+      rescue Badgeville::NotFound
+      end
+    end
+
     def self.update(id, attributes = {})
       client.put("/players/#{id}.json", player: attributes)
     end
