@@ -7,12 +7,23 @@ describe Badgeville::Activity do
 
   let(:activity_json) do
     {
-      'verb'       => 'commented',
-      'created_at' => '2011-08-18T22:55:03-07:00',
-      'points'     => 30,
-      'player_id'  => '28d96559be245bf658e9d90a3bca4d29',
-      'user_id'    => 'f1c385726538d79e43795d6a4006e7fd',
-      'rewards'    => [{'name' => 'first_comment'}, {'name' => 'first_share'}]
+      '_id'            => 'ACTIVITY_ID',
+      'contents'       => [],
+      'created_at'     => '2011-08-18T22:55:03-07:00',
+      'deleted_at'     => nil,
+      'internal'       => false,
+      'points'         => 30,
+      'player_id'      => 'PLAYER_ID',
+      'player_type'    => 'Player',
+      'src_player'     => nil,
+      'unit_rp'        => 40, # custom defined unit,
+      'unit_xp'        => 50, # another custom defined unit
+      'shard_id'       => 'SHARD_ID',
+      'site_id'        => 'SITE_ID',
+      'user_id'        => 'USER_ID',
+      'rewards'        => [{'name' => 'first_comment'}, {'name' => 'first_share'}],
+      'definition_ids' => ['DEFINITION_ID'],
+      'verb'           => 'commented'
     }
   end
 
@@ -94,10 +105,16 @@ describe Badgeville::Activity do
     it 'sets some variables' do
       activity = Badgeville::Activity.new(activity_json)
 
-      activity.verb.should      == 'commented'
-      activity.points.should    == 30
-      activity.player_id.should == '28d96559be245bf658e9d90a3bca4d29'
-      activity.user_id.should   == 'f1c385726538d79e43795d6a4006e7fd'
+      activity.contents.should       == [] # no idea what this is
+      activity.definition_ids.should == ['DEFINITION_ID']
+      activity.points.should         == 30
+      activity.player_type.should    == 'Player'
+      activity.src_player.should     == nil # no idea what this is
+      activity.shard_id.should       == 'SHARD_ID'
+      activity.site_id.should        == 'SITE_ID'
+      activity.player_id.should      == 'PLAYER_ID'
+      activity.user_id.should        == 'USER_ID'
+      activity.verb.should           == 'commented'
     end
   end
 
@@ -119,7 +136,45 @@ describe Badgeville::Activity do
   describe 'created_at' do
     it 'returns the parsed date time of created at' do
       activity = Badgeville::Activity.new(activity_json)
-      Time.parse(activity_json["created_at"]).iso8601
+
+      activity.created_at.iso8601.should == Time.parse(activity_json['created_at']).iso8601
+    end
+  end
+
+  describe 'deleted_at' do
+    it 'returns the parsed date time of deleted at' do
+      json     = activity_json.merge('deleted_at' => '2012-06-06T22:55:03-07:00')
+      activity = Badgeville::Activity.new(json)
+
+      activity.deleted_at.iso8601.should == Time.parse(json['deleted_at']).iso8601
+    end
+
+    it 'returns nil if the activity was not deleted' do
+      activity = Badgeville::Activity.new(activity_json)
+
+      activity.deleted_at.should be_nil
+    end
+  end
+
+  describe 'internal?' do
+    it 'returns false if the activity was not an internal one' do
+      activity = Badgeville::Activity.new(activity_json)
+
+      activity.internal?.should be_false
+    end
+
+    it 'returns true if the activity was an internal one (like bv_adjust_units)' do
+      activity = Badgeville::Activity.new(activity_json.merge('internal' => true))
+
+      activity.internal?.should be_true
+    end
+  end
+
+  describe 'id' do
+    it 'returns the id of the activity' do
+      activity = Badgeville::Activity.new(activity_json)
+
+      activity.id.should == 'ACTIVITY_ID'
     end
   end
 
@@ -132,8 +187,36 @@ describe Badgeville::Activity do
 
     it 'does not return known attributes as meta data' do
       activity = Badgeville::Activity.new(activity_json)
+      activity.meta.keys.should have(0).items
+    end
+  end
 
-      activity.meta[:player_id].should be_nil
+  describe 'points and units' do
+    let(:activity) { Badgeville::Activity.new(activity_json) }
+
+    it 'returns the points of the activity' do
+      activity.points.should == 30
+    end
+
+    it 'returns custom point units' do
+      activity.unit_rp.should == 40
+      activity.unit_xp.should == 50
+    end
+
+    it 'responds to the custom unit methods' do
+      activity.should respond_to(:unit_xp)
+      activity.should respond_to(:unit_rp)
+    end
+
+    it 'does not respond to undefined custom units' do
+      activity.should_not respond_to(:unit_custom)
+    end
+
+    # common gotcha, here as a small safety net
+    it 'still raises a MethodMissing error for undefined methods' do
+      expect {
+        activity.undefined_method
+      }.should raise_error(NoMethodError)
     end
   end
 end

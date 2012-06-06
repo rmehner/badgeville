@@ -1,4 +1,5 @@
 require 'json'
+require 'time'
 require 'rest_client'
 require 'badgeville/endpoint'
 require 'badgeville/activity'

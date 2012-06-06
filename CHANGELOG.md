@@ -17,6 +17,9 @@
   * `create` to create a user on the Badgeville network
 * Badgeville::Activity enhanced with:
   * `create` to create an activity for the player by the player_id or site and email
+  * `deleted_at`, `internal?`, `id`
+  * a mapper for units one got for the activity. For example if a custom unit "unit_xp" is
+    defined for the Activity you'll have access to it via `activity.unit_xp`
 * Deprecated `Badgeville::Client.log_activity` in favor of `Badgeville::Activity.create`
 * Moved deprecated methods to a separate module `DeprecatedClientMethods`.
 * Badgeville::Reward enhanced with:

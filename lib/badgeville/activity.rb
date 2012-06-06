@@ -1,6 +1,13 @@
 module Badgeville
   class Activity < Endpoint
-    attr_accessor :verb, :player_id, :user_id, :points
+    ATTRIBUTES = [
+      :contents, :definition_ids, :player_id, :player_type, :points, :src_player,
+      :shard_id, :site_id, :user_id, :verb
+    ]
+
+    ATTRIBUTES.each do |attr|
+      attr_accessor attr
+    end
 
     def self.create(attributes)
       if (!attributes[:player_id]) && (!attributes[:email] || !attributes[:site])
@@ -25,29 +32,62 @@ module Badgeville
       new(response)
     end
 
-    def initialize(json = {})
-      @json      = json
-      @verb      = @json['verb']
-      @player_id = @json['player_id']
-      @user_id   = @json['user_id']
-      @points    = @json['points'].to_i
-    end
+    def initialize(attributes = {})
+      @attributes = attributes
 
-    def rewards
-      @rewards ||= @json['rewards'].map {|reward| Reward.new(reward)}
+      ATTRIBUTES.each do |attr|
+        self.send("#{attr}=", @attributes[attr.to_s])
+      end
+
+      @units = @attributes.select {|k, v| k =~ /^unit_/}
     end
 
     def created_at
-      @created_at ||= DateTime.parse(@json['created_at']).to_time
+      @created_at ||= Time.parse(@attributes['created_at'])
+    end
+
+    def deleted_at
+      if !@deleted_at && @attributes['deleted_at']
+        @deleted_at = Time.parse(@attributes['deleted_at'])
+      end
+
+      @deleted_at
+    end
+
+    def id
+      @attributes['_id']
+    end
+
+    def internal?
+      @attributes['internal']
+    end
+
+    def method_missing(method)
+      @units[method.to_s] || super
+    end
+
+    def respond_to?(method)
+      @units.keys.include?(method.to_s) || super
+    end
+
+    def rewards
+      @rewards ||= @attributes['rewards'].map {|reward| Reward.new(reward)}
+    end
+
+    def points
+      @points.to_i
     end
 
     def meta
-      known_attributes = [:created_at, :player_id, :points, :rewards, :user_id, :verb]
-      @meta ||= @json.inject({}) do |meta, entry|
+      known_attributes = ATTRIBUTES + [
+        :created_at, :deleted_at, :points, :rewards, :_id, :id, :internal
+      ]
+
+      @meta ||= @attributes.inject({}) do |meta, entry|
         key   = entry[0].to_sym
         value = entry[1]
 
-        unless known_attributes.include?(key)
+        unless known_attributes.include?(key) || @units.keys.include?(key.to_s)
           meta[key] = value
         end
 
