@@ -1,10 +1,10 @@
 module Badgeville
   class Player < Endpoint
     ATTRIBUTES = [
-      :id, :email, :first_name, :last_name, :display_name, :nick_name,
-      :user_email, :user_id, :site_id, :site_url, :facebook_id, :facebook_link,
-      :twitter_id, :twitter_username, :twitter_link, :custom_picture_url,
-      :picture_url, :preferences, :teams, :units
+      :email, :first_name, :last_name, :display_name, :nick_name, :user_email, 
+      :user_id, :site_id, :site_url, :facebook_id, :facebook_link, :twitter_id,
+      :twitter_username, :twitter_link, :custom_picture_url, :picture_url,
+      :preferences, :teams, :units
     ]
 
     ATTRIBUTES.each do |attr|
