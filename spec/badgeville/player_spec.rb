@@ -201,22 +201,28 @@ describe Badgeville::Player do
   end
 
   describe '.delete' do
-    it 'deletes the player at badgeville' do
+    before(:each) do
       stub_request(:delete, /.*\/players\/PLAYER_ID\.json/).to_return(
-        status: 200, body: {}
+        status: 200, body: {}.to_json
       )
+    end
 
+    it 'deletes the player at badgeville' do
       Badgeville::Player.delete('PLAYER_ID')
 
       a_request(:delete, /.*\/players\/PLAYER_ID\.json/).should have_been_made
     end
 
+    it 'returns true if the could be deleted' do
+      Badgeville::Player.delete('PLAYER_ID').should == true
+    end
+
     it 'returns nil if the player could not be found' do
       stub_request(:delete, /.*\/players\/PLAYER_ID\.json/).to_return(
-        status: 404, body: {"errors" => [{"error" => "not found"}]}
+        status: 404, body: {"errors" => [{"error" => "not found"}]}.to_json
       )
 
-      Badgeville::Player.delete('PLAYER_ID').should be_nil
+      Badgeville::Player.delete('PLAYER_ID').should == false
     end
   end
 

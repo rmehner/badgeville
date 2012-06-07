@@ -13,7 +13,7 @@ module Badgeville
       end
 
       def delete(id_or_email)
-        client.delete("/users/#{id_or_email}.json")
+        client.delete("/users/#{id_or_email}.json") != nil
       end
 
       def find(id_or_email)

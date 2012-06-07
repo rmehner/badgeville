@@ -49,7 +49,7 @@ module Badgeville
       end
 
       def delete(id)
-        client.delete("/players/#{id}.json")
+        client.delete("/players/#{id}.json") != nil
       end
     end
 
