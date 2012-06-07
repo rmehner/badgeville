@@ -16,7 +16,7 @@ module Badgeville
         begin
           response = client.get("users/#{id_or_email}.json")
           new(response)
-        rescue Badgeville::NotFound
+        rescue NotFound
         end
       end
     end

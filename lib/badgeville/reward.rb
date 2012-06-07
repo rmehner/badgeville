@@ -45,7 +45,7 @@ module Badgeville
           response.inject([]) do |rewards, reward|
             rewards << new(reward)
           end
-        rescue Badgeville::NotFound
+        rescue NotFound
           []
         end
       end

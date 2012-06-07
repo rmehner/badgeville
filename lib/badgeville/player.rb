@@ -36,7 +36,7 @@ module Badgeville
         begin
           response = client.get('/players/info.json', {email: email, site: site})
           new(response)
-        rescue Badgeville::NotFound
+        rescue NotFound
         end
       end
 
@@ -44,7 +44,7 @@ module Badgeville
         begin
           response = client.get("/players/#{id}.json")
           new(response)
-        rescue Badgeville::NotFound
+        rescue NotFound
         end
       end
 

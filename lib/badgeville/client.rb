@@ -73,7 +73,7 @@ module Badgeville
 
       begin
         request!(:delete, endpoint)
-      rescue NotFound => e
+      rescue NotFound
         nil
       end
     end
