@@ -134,20 +134,6 @@ describe Badgeville::Player do
       )
     end
 
-    it 'creates a player at badgeville with user_id and site_id' do
-      # POST /players.json {player: {user_id: 'XX', site_id: 'ID', ...}}
-      Badgeville::Player.create({
-        user_id: 'USER_ID',
-        site_id: 'SITE_ID',
-        display_name: 'rmehner'
-      })
-
-      a_request(:post, /.*\/players\.json$/).with(
-        body: hash_including({player: {user_id: 'USER_ID', site_id: 'SITE_ID', display_name: 'rmehner'}}),
-        headers: {'Content-Type' => 'application/json'}
-      ).should have_been_made
-    end
-
     it 'creates a player at badgeville with email and site' do
       Badgeville::Player.create({
         email: 'robin@coding-robin.de',
@@ -163,8 +149,8 @@ describe Badgeville::Player do
 
     it 'returns a player object on success' do
       player = Badgeville::Player.create({
-        user_id: 'USER_ID',
-        site_id: 'SITE_ID',
+        email: 'robin@coding-robin.de',
+        site: 'example.org',
         display_name: 'rmehner'
       })
 
@@ -172,22 +158,22 @@ describe Badgeville::Player do
       player.display_name.should == 'rmehner'
     end
 
-    it 'handles the error when site_id is given but user_id is not' do
-      -> {
-        Badgeville::Player.create({
-          site_id: 'SITE_ID',
-          display_name: 'rmehner'
-        })
-      }.should raise_error(ArgumentError, 'You have to provide either user_id and site_id or email and site')
-    end
-
-    it 'raises an ArgumentError if site is given but user is not' do
+    it 'raises an ArgumentError if site is given but email is not' do
       -> {
         Badgeville::Player.create({
           site: 'example.org',
           display_name: 'rmehner'
         })
-      }.should raise_error(ArgumentError, 'You have to provide either user_id and site_id or email and site')
+      }.should raise_error(ArgumentError, 'You have to provide email and site')
+    end
+
+    it 'raises an ArgumentError if email is given but site is not' do
+      -> {
+        Badgeville::Player.create({
+          email: 'robin@coding-robin.de',
+          display_name: 'rmehner'
+        })
+      }.should raise_error(ArgumentError, 'You have to provide email and site')
     end
 
     it 'handles the error when the email is already taken' do

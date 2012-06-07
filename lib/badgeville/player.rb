@@ -1,7 +1,7 @@
 module Badgeville
   class Player < Endpoint
     ATTRIBUTES = [
-      :email, :first_name, :last_name, :display_name, :nick_name, :user_email, 
+      :email, :first_name, :last_name, :display_name, :nick_name, :user_email,
       :user_id, :site_id, :site_url, :facebook_id, :facebook_link, :twitter_id,
       :twitter_username, :twitter_link, :custom_picture_url, :picture_url,
       :preferences, :teams, :units
@@ -13,12 +13,8 @@ module Badgeville
 
     class << self
       def create(attributes)
-        if (attributes[:email] && !attributes[:site]) || (!attributes[:email] && attributes[:site])
-          raise ArgumentError.new('You have to provide either user_id and site_id or email and site')
-        end
-
-        if (attributes[:site_id] && !attributes[:user_id]) || (!attributes[:site_id] && attributes[:user_id])
-          raise ArgumentError.new('You have to provide either user_id and site_id or email and site')
+        if !attributes[:email] || !attributes[:site]
+          raise ArgumentError.new('You have to provide email and site')
         end
 
         response = client.post(
