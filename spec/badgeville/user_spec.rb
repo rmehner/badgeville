@@ -71,6 +71,26 @@ describe Badgeville::User do
     end
   end
 
+  describe '.delete' do
+    it 'deletes the user at badgeville' do
+      stub_request(:delete, /.*\/users\/USER_ID\.json/).to_return(
+        status: 200, body: {}
+      )
+
+      Badgeville::User.delete('USER_ID')
+
+      a_request(:delete, /.*\/users\/USER_ID\.json/).should have_been_made
+    end
+
+    it 'returns nil if the user could not be found' do
+      stub_request(:delete, /.*\/users\/USER_ID\.json/).to_return(
+        status: 404, body: {"errors" => [{"error" => "not found"}]}
+      )
+
+      Badgeville::User.delete('USER_ID').should be_nil
+    end
+  end
+
   describe 'initialize' do
     it 'sets the attributes' do
       user = Badgeville::User.new(user_json['data'])

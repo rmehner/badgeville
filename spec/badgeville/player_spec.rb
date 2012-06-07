@@ -200,7 +200,7 @@ describe Badgeville::Player do
     end
   end
 
-  describe 'delete' do
+  describe '.delete' do
     it 'deletes the player at badgeville' do
       stub_request(:delete, /.*\/players\/PLAYER_ID\.json/).to_return(
         status: 200, body: {}

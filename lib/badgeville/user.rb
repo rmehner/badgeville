@@ -12,6 +12,10 @@ module Badgeville
         new(response)
       end
 
+      def delete(id_or_email)
+        client.delete("/users/#{id_or_email}.json")
+      end
+
       def find(id_or_email)
         begin
           response = client.get("users/#{id_or_email}.json")

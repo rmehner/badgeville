@@ -16,6 +16,7 @@
 * Badgeville::User implemented with:
   * `find` which takes the user id or his email and returns a Badgeville::User object
   * `create` to create a user on the Badgeville network
+  * `delete` to delete a user on the Badgeville network
 * Badgeville::Activity enhanced with:
   * `create` to create an activity for the player by the player_id or site and email
   * `deleted_at`, `internal?`, `id`
