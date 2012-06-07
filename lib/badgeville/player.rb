@@ -51,6 +51,10 @@ module Badgeville
       def update(id, attributes = {})
         client.put("/players/#{id}.json", player: attributes)
       end
+
+      def delete(id)
+        client.delete("/players/#{id}.json")
+      end
     end
 
     def initialize(attributes = {})

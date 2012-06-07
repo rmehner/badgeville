@@ -129,7 +129,7 @@ describe Badgeville::Client do
     end
   end
 
-  describe "#delete" do
+  describe "#remove_reward" do
     let(:reward) {stub(:reward, id: 5, earned_at: Time.now)}
 
     before do
@@ -138,27 +138,27 @@ describe Badgeville::Client do
     end
 
     it "succeed for an earned reward" do
-      @badgeville.delete(reward).should be_true
+      @badgeville.remove_reward(reward).should be_true
     end
 
     it "fails for an un-earned reward (reward definition)" do
       reward.stub(earned_at: nil)
 
       expect {
-        @badgeville.delete(reward)
+        @badgeville.remove_reward(reward)
       }.to raise_error(Badgeville::BadgevilleError)
     end
 
     it "fails for non reward object" do
       expect {
-        @badgeville.delete(nil)
+        @badgeville.remove_reward(nil)
       }.to raise_error(Badgeville::BadgevilleError)
     end
 
     it "handles response error codes" do
       stub_http_request(:delete, @url).to_return(status: 500)
       expect {
-        @badgeville.delete(reward)
+        @badgeville.remove_reward(reward)
       }.to raise_error(Badgeville::BadgevilleError)
     end
   end

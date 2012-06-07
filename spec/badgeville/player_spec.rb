@@ -197,13 +197,13 @@ describe Badgeville::Player do
 
   describe '.update' do
     it 'updates the player' do
-      stub_request(:put, /.*\/players\/USER_ID\.json/).to_return(
+      stub_request(:put, /.*\/players\/PLAYER_ID\.json/).to_return(
         status: 200
       )
 
-      Badgeville::Player.update('USER_ID', {first_name: 'Robin'})
+      Badgeville::Player.update('PLAYER_ID', {first_name: 'Robin'})
 
-      a_request(:put, /.*\/players\/USER_ID\.json/).with(
+      a_request(:put, /.*\/players\/PLAYER_ID\.json/).with(
         body: {player: {first_name: 'Robin'}},
         headers: {'Content-Type' => 'application/json'}
       ).should have_been_made
@@ -211,6 +211,26 @@ describe Badgeville::Player do
 
     it 'returns the errors why the update was not successful' do
       pending('TODO: Handle all errors. First find out how Badgeville responds')
+    end
+  end
+
+  describe 'delete' do
+    it 'deletes the player at badgeville' do
+      stub_request(:delete, /.*\/players\/PLAYER_ID\.json/).to_return(
+        status: 200, body: {}
+      )
+
+      Badgeville::Player.delete('PLAYER_ID')
+
+      a_request(:delete, /.*\/players\/PLAYER_ID\.json/).should have_been_made
+    end
+
+    it 'returns nil if the player could not be found' do
+      stub_request(:delete, /.*\/players\/PLAYER_ID\.json/).to_return(
+        status: 404, body: {"errors" => [{"error" => "not found"}]}
+      )
+
+      Badgeville::Player.delete('PLAYER_ID').should be_nil
     end
   end
 

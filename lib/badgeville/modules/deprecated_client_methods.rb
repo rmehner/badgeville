@@ -106,7 +106,7 @@ module Badgeville
       Reward.new(make_call(:post, :rewards, params))
     end
 
-    def delete(reward)
+    def remove_reward(reward)
       if reward.respond_to?(:earned_at) && reward.earned_at
         end_point = "rewards/#{reward.id}.json"
         begin

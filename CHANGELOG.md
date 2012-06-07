@@ -12,6 +12,7 @@
   * `find_by_id` to find a player by its id
   * `create` to create a player at Badgeville (with `site_id` and `user_id` or `email` and `site`)
   * `update` to update a player by the player_id
+  * `delete` to delete a player by the player_id
 * Badgeville::User implemented with:
   * `find` which takes the user id or his email and returns a Badgeville::User object
   * `create` to create a user on the Badgeville network
@@ -28,7 +29,9 @@
 * Badgeville::RewardDefinition implemented with:
   * `find_by_site` to get all the reward definitions for a site (returned as Badgeville::Reward)
 * Badgeville::Client now raises correct Errors when RestClient raises an error
-* Deprecated Badgeville::Client.public_key= as we don't need the public key anyway
+* `Badgeville::Client.delete` now handles DELETE requests and forwards to `remove_reward` if called with an reward object
+* Renamed `Badgeville::Client.delete` to `Badgeville::Client.remove_reward`
+* Deprecated `Badgeville::Client.public_key=` as we don't need the public key anyway
 
 0.1.1 (May 7, 2012)
 ===================

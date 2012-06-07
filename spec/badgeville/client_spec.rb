@@ -56,4 +56,28 @@ describe Badgeville::Client do
       }.to raise_error Badgeville::Unprocessable
     end
   end
+
+  describe 'delete' do
+    it 'sends a DELETE request to the given endpoint' do
+      stub_request(:delete, /.*/)
+
+      Badgeville.client.delete('/endpoint.json')
+
+      a_request(:delete, /\/endpoint\.json/).should have_been_made
+    end
+
+    it 'forwards to remove_reward if the argument is a reward' do
+      stub_request(:delete, /.*/).to_return(status: 200)
+
+      reward = Badgeville::Reward.new(
+        'created_at' => '2011-08-18T22:55:03-07:00',
+        'id'         => 'REWARD_ID',
+        'user_id'    => 'USER_ID'
+      )
+
+      Badgeville.client.delete(reward)
+
+      a_request(:delete, /\/rewards\/REWARD_ID.json/).should have_been_made
+    end
+  end
 end

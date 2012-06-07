@@ -65,12 +65,26 @@ module Badgeville
       request!(:put, endpoint, params)
     end
 
+    def delete(endpoint)
+      if endpoint.is_a?(Reward)
+        warn '[DEPRECATED] Please use Badgeville::Client.remove_reward instead'
+        return remove_reward(endpoint)
+      end
+
+      begin
+        request!(:delete, endpoint)
+      rescue NotFound => e
+      end
+    end
+
     private
 
       def request!(method, endpoint, params = {})
         begin
           if method == :get
             response = session[endpoint].get(params: params)
+          elsif method == :delete
+            response = session[endpoint].delete
           else
             response = session[endpoint].send(method, params.to_json, content_type: :json, accept: :json)
           end
