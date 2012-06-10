@@ -1,9 +1,13 @@
 module Badgeville
   class Reward < Endpoint
-    attr_accessor :active, :definition_id, :hint, :id, :message, :name, :tags
-    attr_accessor :threshold, :verb
+    ATTRIBUTES = [
+      :active, :definition_id, :hint, :id, :image_url, :message, :name, :tags,
+      :threshold, :type, :verb
+    ]
 
-    attr_writer :image_url
+    ATTRIBUTES.each do |attr|
+      attr_accessor attr
+    end
 
     class << self
       def find_by_player_id(player_id)
@@ -51,7 +55,7 @@ module Badgeville
       end
 
       def init_from(json)
-        ['name', 'active', 'hint', 'image_url', 'message'].each do |key|
+        ['name', 'active', 'hint', 'image_url', 'message', 'type'].each do |key|
           send("#{key}=", json[key])
         end
 
