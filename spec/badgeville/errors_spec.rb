@@ -60,6 +60,17 @@ describe 'Badgeville Errors' do
         e.original_error.class.should == RestClient::InternalServerError
       end
     end
+
+    it 'should have a response attribute' do
+      response = '{{"errors":[{"error":"Sorry, something went wrong"}]}'
+      stubbed_request.to_return(status: 500, body: response)
+
+      begin
+        Badgeville.client.get('/rewards.json')
+      rescue Badgeville::ServerError => e
+        e.response.should == response
+      end
+    end
   end
 
   describe Badgeville::NotAvailable do

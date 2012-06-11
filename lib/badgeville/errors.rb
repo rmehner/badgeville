@@ -8,6 +8,14 @@ module Badgeville
     end
   end
 
+  class ErrorWithResponse < Error
+    attr_reader :response
+    def initialize(message, error)
+      @response = error.response
+      super(message, error)
+    end
+  end
+
   # deprecated old error
   class BadgevilleError < Error
     attr_accessor :code
@@ -34,36 +42,29 @@ module Badgeville
   end
 
   # 403
-  class Forbidden < Error
-    attr_reader :response
+  class Forbidden < ErrorWithResponse
     def initialize(error)
-      @response = error.response
       super('Access denied', error)
     end
   end
 
   # 404
-  class NotFound < Error
-    attr_reader :response
+  class NotFound < ErrorWithResponse
     def initialize(error)
-      @response = error.response
       super('Could not find resource', error)
     end
   end
 
   # 422
-  class Unprocessable < Error
-    attr_reader :response
+  class Unprocessable < ErrorWithResponse
     def initialize(error)
-      @response = error.response
       super('Unprocessable entity', error)
     end
   end
 
   # 500
-  class ServerError < Error
+  class ServerError < ErrorWithResponse
     def initialize(error)
-      @response = error.response
       super('Internal server error', error)
     end
   end
