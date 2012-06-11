@@ -142,7 +142,7 @@ describe 'Badgeville Errors' do
       begin
         Badgeville.client.get('/rewards.json')
       rescue Badgeville::ParseError => e
-        e.message.should == "[Badgeville] JSON could not be parsed: 757: unexpected token at '{invalidjson}'"
+        e.message.should match(/unexpected token at/)
         e.original_error.class.should == JSON::ParserError
       end
     end
