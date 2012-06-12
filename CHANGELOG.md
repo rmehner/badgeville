@@ -1,7 +1,11 @@
 0.4.0 (May XX, 2012)
 ====================
 
-* BREAKS BACKWARDS COMPATIBILITY
+* *WARNING* This might break backwards compatibility. We tried our best to keep
+  BC with 0.4.0 and keep tests to prove that, but we cannot promise you that something
+  slipped through our hands. Where appropriate we put notices to which method you should
+  migrate. Deprecated methods will be removed in future releases (0.6.x)
+
 * DOES NOT INCLUDE PROPER ERROR HANDLING YET!
 
 * Activity now lazily loads its attributes
