@@ -1,8 +1,8 @@
 module Badgeville
   class Reward < Endpoint
     ATTRIBUTES = [
-      :active, :definition_id, :hint, :id, :image_url, :message, :name, :tags,
-      :threshold, :type, :verb
+      :active, :definition, :definition_id, :hint, :id, :image_url, :message, :name,
+      :tags, :threshold, :type, :verb
     ]
 
     ATTRIBUTES.each do |attr|
@@ -23,8 +23,8 @@ module Badgeville
       @json = json
 
       if @json
-        reward_definition = @json['definition']
-        reward_definition ? init_from(reward_definition) : init_from(@json)
+        self.definition = @json['definition']
+        definition ? init_from(definition) : init_from(@json)
         @id = json['id'] if @json.has_key?('user_id')
       end
     end

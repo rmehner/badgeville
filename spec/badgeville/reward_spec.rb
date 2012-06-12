@@ -188,6 +188,7 @@ describe Badgeville::Reward do
       @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
       @reward.message.should == 'You won the internet!'
       @reward.type.should == 'achievement'
+      @reward.definition.should be_nil
     end
 
     describe "image_url" do
@@ -267,6 +268,7 @@ describe Badgeville::Reward do
       @reward.definition_id.should == '4e4dfab6c47eed727b005c38'
       @reward.message.should == 'You won the internet!'
       @reward.type.should == 'achievement'
+      @reward.definition.should == reward_json
     end
   end
 
