@@ -283,7 +283,7 @@ describe Badgeville::Reward do
     end
   end
 
-  context "when reward is a level (has data with position and start_points)" do
+  context "when reward is a level" do
     before do
       reward_json['type']                 = 'level'
       reward_json['data']['position']     = 3
@@ -293,7 +293,6 @@ describe Badgeville::Reward do
     end
 
     it 'has position and start_points accessors' do
-      @reward.type.should == 'level'
       @reward.position.should == 3
       @reward.start_points.should == 300
     end
