@@ -61,14 +61,16 @@ module Badgeville
 
         @id = @definition_id = json['_id']
 
-        if json['data'] && json['type'] == 'achievement'
-          @verb      = json['data']['verb']
-          @threshold = json['data']['threshold'].to_i
-        end
+        if json['data']
+          if json['type'] == 'achievement'
+            @verb      = json['data']['verb']
+            @threshold = json['data']['threshold'].to_i
+          end
 
-        if json['data'] && json['type'] == 'level'
-          @position     = json['data']['position'].to_i
-          @start_points = json['data']['start_points'].to_i
+          if json['type'] == 'level'
+            @position     = json['data']['position'].to_i
+            @start_points = json['data']['start_points'].to_i
+          end
         end
 
         @tags = json['tags'] || []
