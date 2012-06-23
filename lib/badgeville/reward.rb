@@ -2,7 +2,7 @@ module Badgeville
   class Reward < Endpoint
     ATTRIBUTES = [
       :active, :definition, :definition_id, :hint, :id, :image_url, :message, :name,
-      :tags, :threshold, :type, :verb
+      :position, :start_points, :tags, :threshold, :type, :verb
     ]
 
     ATTRIBUTES.each do |attr|
@@ -64,6 +64,11 @@ module Badgeville
         if json['data'] && json['type'] == 'achievement'
           @verb      = json['data']['verb']
           @threshold = json['data']['threshold'].to_i
+        end
+
+        if json['data'] && json['type'] == 'level'
+          @position     = json['data']['position'].to_i
+          @start_points = json['data']['start_points'].to_i
         end
 
         @tags = json['tags'] || []

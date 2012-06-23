@@ -282,4 +282,20 @@ describe Badgeville::Reward do
       @reward.threshold.should == 2
     end
   end
+
+  context "when reward is a level (has data with position and start_points)" do
+    before do
+      reward_json['type']                 = 'level'
+      reward_json['data']['position']     = 3
+      reward_json['data']['start_points'] = 300
+
+      @reward = Badgeville::Reward.new(reward_json)
+    end
+
+    it 'has position and start_points accessors' do
+      @reward.type.should == 'level'
+      @reward.position.should == 3
+      @reward.start_points.should == 300
+    end
+  end
 end
