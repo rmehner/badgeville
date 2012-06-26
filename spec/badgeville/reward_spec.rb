@@ -176,12 +176,12 @@ describe Badgeville::Reward do
     end
   end
 
-  context "when json is a reward definition" do
+  context 'when json is a reward definition' do
     before do
       @reward = Badgeville::Reward.new(reward_json)
     end
 
-    it "initialize based on json" do
+    it 'initialize based on json' do
       @reward.name.should == "A Way with Words"
       @reward.active.should be_true
       @reward.id.should == "4e4dfab6c47eed727b005c38"
@@ -295,6 +295,28 @@ describe Badgeville::Reward do
     it 'has position and start_points accessors' do
       @reward.position.should == 3
       @reward.start_points.should == 300
+    end
+  end
+
+  describe 'adjustments' do
+    it 'returns an empty hash if adjustments were not defined' do
+      reward = Badgeville::Reward.new(reward_json)
+
+      reward.adjustments.should == {}
+    end
+
+    it 'returns an empty hash if adjustments were just empty' do
+      reward_json['adjustments'] = {}
+      reward = Badgeville::Reward.new(reward_json)
+
+      reward.adjustments.should == {}
+    end
+
+    it 'allows the access to the adjustments' do
+      reward_json['adjustments'] = {'points' => {'definition' => 100}}
+      reward = Badgeville::Reward.new(reward_json)
+
+      reward.adjustments[:points].should == 100
     end
   end
 end

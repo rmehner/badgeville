@@ -1,8 +1,8 @@
 module Badgeville
   class Reward < Endpoint
     ATTRIBUTES = [
-      :active, :definition, :definition_id, :hint, :id, :image_url, :message, :name,
-      :position, :start_points, :tags, :threshold, :type, :verb
+      :active, :adjustments, :definition, :definition_id, :hint, :id, :image_url,
+      :message, :name, :position, :start_points, :tags, :threshold, :type, :verb
     ]
 
     ATTRIBUTES.each do |attr|
@@ -74,6 +74,13 @@ module Badgeville
         end
 
         @tags = json['tags'] || []
+
+        @adjustments = {}
+        if json['adjustments']
+          json['adjustments'].each do |k, v|
+            @adjustments[k.to_sym] = v['definition']
+          end
+        end
       end
   end
 end
