@@ -273,28 +273,24 @@ describe Badgeville::Reward do
   end
 
   context "when reward is an achievement (has data with verb and threshold)" do
-    before do
-      @reward = Badgeville::Reward.new(reward_json)
-    end
-
     it "has verb and threshold accessors" do
-      @reward.verb.should == "commented"
-      @reward.threshold.should == 2
+      reward = Badgeville::Reward.new(reward_json)
+
+      reward.verb.should == "commented"
+      reward.threshold.should == 2
     end
   end
 
   context "when reward is a level" do
-    before do
+    it 'has position and start_points accessors' do
       reward_json['type']                 = 'level'
       reward_json['data']['position']     = 3
       reward_json['data']['start_points'] = 300
 
-      @reward = Badgeville::Reward.new(reward_json)
-    end
+      reward = Badgeville::Reward.new(reward_json)
 
-    it 'has position and start_points accessors' do
-      @reward.position.should == 3
-      @reward.start_points.should == 300
+      reward.position.should == 3
+      reward.start_points.should == 300
     end
   end
 
