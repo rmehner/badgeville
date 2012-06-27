@@ -115,4 +115,30 @@ describe Badgeville::RewardDefinition do
       pending('TODO: Handle all errors. First find out how Badgeville responds')
     end
   end
+
+  describe '.delete' do
+    before(:each) do
+      stub_request(:delete, /.*\/reward_definitions\/DEFINITION_ID\.json/).to_return(
+        status: 200, body: {}.to_json
+      )
+    end
+
+    it 'deletes the reward definition at badgeville' do
+      Badgeville::RewardDefinition.delete('DEFINITION_ID')
+
+      a_request(:delete, /.*\/reward_definitions\/DEFINITION_ID\.json/).should have_been_made
+    end
+
+    it 'returns true if the reward definition could be deleted' do
+      Badgeville::RewardDefinition.delete('DEFINITION_ID').should == true
+    end
+
+    it 'returns false if the reward definition could not be found' do
+      stub_request(:delete, /.*\/reward_definitions\/DEFINITION_ID\.json/).to_return(
+        status: 404, body: {"errors" => [{"error" => "not found"}]}.to_json
+      )
+
+      Badgeville::RewardDefinition.delete('DEFINITION_ID').should == false
+    end
+  end
 end

@@ -10,5 +10,9 @@ module Badgeville
     def self.update(id, attributes = {})
       client.put("/reward_definitions/#{id}.json", reward_definition: attributes)
     end
+
+    def self.delete(id)
+      client.delete("/reward_definitions/#{id}.json") != nil
+    end
   end
 end
