@@ -33,6 +33,7 @@
   * `find_by_email_and_site` to get all the rewards for a player by email and site (reads through pagination)
   * `type` to get the type of the reward (e.g. level, achievement etc.)
   * `definition` to get the reward definition if there was one
+  * `adjustments` to get the adjustments that you'll get for a reward
 * Badgeville::RewardDefinition implemented with:
   * `find_by_site` to get all the reward definitions for a site (returned as Badgeville::Reward)
 * Badgeville::Client now raises correct Errors when RestClient raises an error
