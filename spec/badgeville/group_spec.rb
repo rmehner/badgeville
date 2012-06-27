@@ -204,7 +204,7 @@ describe Badgeville::Group do
 
     it 'allows to request specific formats' do
       [:original, :large, :medium, :grayscale, :grayscale_small].each do |format|
-        @group.image_url(format).should == '//s3.amazonaws.com/#{format}.gif?3'
+        @group.image_url(format).should == "//s3.amazonaws.com/#{format}.gif?3"
       end
     end
 
