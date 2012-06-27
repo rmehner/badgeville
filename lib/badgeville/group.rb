@@ -10,6 +10,9 @@ module Badgeville
       attr_accessor attr
     end
 
+    # everywhere else this is called "hint", try to get some consistency into the API
+    alias_method :hint, :tip
+
     def self.find_by_site(site)
       response = client.get_all('groups.json', {site: site})
 

@@ -38,6 +38,8 @@
   * `find_by_site` to get all the reward definitions for a site (returned as Badgeville::Reward)
   * `update` to update a definition at Badgeville (crucial if you need levels that adjust points for the user)
   * `delete` to delete a definition at Badgeville
+* Badgeville::Group implemented with:
+  * `find_by_site` to get all the missions / tracks / groups for a site
 * Badgeville::Client now raises correct Errors when RestClient raises an error
 * `Badgeville::Client.delete` now handles DELETE requests and forwards to `remove_reward` if called with an reward object
 * Renamed `Badgeville::Client.delete` to `Badgeville::Client.remove_reward`

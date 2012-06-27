@@ -101,7 +101,7 @@ describe Badgeville::Group do
       "name"               => "My Mission",
       "type"               => "collection",
       "image_url"          => "http://s3.amazonaws.com/original.gif?3",
-      "tip"                => "",
+      "tip"                => "this is a hint",
       "message"            => "Congratulations!",
       "privileges"         => nil,
       "note"               => "",
@@ -163,7 +163,8 @@ describe Badgeville::Group do
         group.id.should == 'group_id'
         group.type.should == 'collection'
         group.image_url.should == "//s3.amazonaws.com/original.gif?3"
-        group.tip.should == ""
+        group.tip.should == "this is a hint"
+        group.hint.should == "this is a hint"
         group.message.should == "Congratulations!"
         group.privileges.should == nil
         group.note.should == ""
