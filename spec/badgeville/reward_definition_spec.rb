@@ -47,7 +47,7 @@ describe Badgeville::RewardDefinition do
     }
   end
 
-  describe 'find_by_site' do
+  describe '.find_by_site' do
     before(:each) do
       stub_request(:get, /.*\/reward_definitions\.json/).to_return(
         status: 200,
@@ -94,6 +94,25 @@ describe Badgeville::RewardDefinition do
       rewards[0].name.should == 'A Way with Words'
       rewards[1].name.should == 'Typinghero'
       rewards[2].name.should == 'Eduard Khil'
+    end
+  end
+
+  describe '.update' do
+    it 'updates the player' do
+      stub_request(:put, /.*\/reward_definitions\/DEFINITION_ID\.json/).to_return(
+        status: 200
+      )
+
+      Badgeville::RewardDefinition.update('DEFINITION_ID', {adjustments: {points: 100}})
+
+      a_request(:put, /.*\/reward_definitions\/DEFINITION_ID\.json/).with(
+        body: {reward_definition: {adjustments: {points: 100}}},
+        headers: {'Content-Type' => 'application/json'}
+      ).should have_been_made
+    end
+
+    it 'returns the errors why the update was not successful' do
+      pending('TODO: Handle all errors. First find out how Badgeville responds')
     end
   end
 end

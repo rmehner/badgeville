@@ -6,5 +6,9 @@ module Badgeville
         rewards << Reward.new(reward)
       end
     end
+
+    def self.update(id, attributes = {})
+      client.put("/reward_definitions/#{id}.json", reward_definition: attributes)
+    end
   end
 end

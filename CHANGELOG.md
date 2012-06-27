@@ -36,6 +36,7 @@
   * `adjustments` to get the adjustments that you'll get for a reward
 * Badgeville::RewardDefinition implemented with:
   * `find_by_site` to get all the reward definitions for a site (returned as Badgeville::Reward)
+  * `update` to update a definition at Badgeville (crucial if you need levels that adjust points for the user)
 * Badgeville::Client now raises correct Errors when RestClient raises an error
 * `Badgeville::Client.delete` now handles DELETE requests and forwards to `remove_reward` if called with an reward object
 * Renamed `Badgeville::Client.delete` to `Badgeville::Client.remove_reward`
