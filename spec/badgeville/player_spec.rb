@@ -213,11 +213,11 @@ describe Badgeville::Player do
       a_request(:delete, /.*\/players\/PLAYER_ID\.json/).should have_been_made
     end
 
-    it 'returns true if the could be deleted' do
+    it 'returns true if the player could be deleted' do
       Badgeville::Player.delete('PLAYER_ID').should == true
     end
 
-    it 'returns nil if the player could not be found' do
+    it 'returns false if the player could not be found' do
       stub_request(:delete, /.*\/players\/PLAYER_ID\.json/).to_return(
         status: 404, body: {"errors" => [{"error" => "not found"}]}.to_json
       )
