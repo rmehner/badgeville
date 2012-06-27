@@ -20,6 +20,9 @@ If you want to have a _stable_ version, use the released one that is available
 on rubygems.org. We'll keep the deprecated usage for the next release, but will
 remove that eventually in near future.
 
+Have a look at the [Changelog](https://github.com/rmehner/badgeville/blob/master/CHANGELOG.md)
+to get a feeling of what changes and what is added with the upcoming version
+
 Deprecated Usage
 ----------------
 First, checkout the examples folder. TL;DR:
