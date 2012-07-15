@@ -173,8 +173,8 @@ describe Badgeville::Client do
     it {@badgeville.site_id.should == "site"}
   end
 
-  describe "verify default timeout is 3" do
-    it {@badgeville.timeout.should == 3}
+  describe "verify default timeout is 5" do
+    it {@badgeville.timeout.should == 5}
   end
 
   describe "verify timeout parameter is set" do

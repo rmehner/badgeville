@@ -44,6 +44,7 @@
 * `Badgeville::Client.delete` now handles DELETE requests and forwards to `remove_reward` if called with an reward object
 * Renamed `Badgeville::Client.delete` to `Badgeville::Client.remove_reward`
 * Deprecated `Badgeville::Client.public_key=` as we don't need the public key anyway
+* Set default timeout to 5, as this is what Badegville recommends
 
 0.1.1 (May 7, 2012)
 ===================

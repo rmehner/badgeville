@@ -1,6 +1,6 @@
 module Badgeville
   class Client
-    TIMEOUT_SECS = 3
+    TIMEOUT_SECS = 5
     HOST         = 'sandbox.v2.badgeville.com'
     PROTOCOL     = 'https'
 

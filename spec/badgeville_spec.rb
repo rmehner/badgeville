@@ -13,7 +13,7 @@ describe Badgeville do
       it 'sets default values for `timeout`, `host` and `protocol` if not set' do
         Badgeville.configure(private_key: 'private_key')
 
-        Badgeville.client.timeout.should == 3
+        Badgeville.client.timeout.should == 5
         Badgeville.client.protocol.should == 'https'
         Badgeville.client.host.should == 'sandbox.v2.badgeville.com'
       end
@@ -36,7 +36,7 @@ describe Badgeville do
           config.private_key = 'private_key'
         end
 
-        Badgeville.client.timeout.should == 3
+        Badgeville.client.timeout.should == 5
         Badgeville.client.protocol.should == 'https'
         Badgeville.client.host.should == 'sandbox.v2.badgeville.com'
       end
