@@ -123,13 +123,14 @@ describe 'Badgeville Errors' do
     end
 
     it 'should have a response attribute' do
-      response = '{{"limit":["exceeded"]}'
+      response = '{"limit":["exceeded"]}'
       stubbed_request.to_return(status: 422, body: response)
 
       begin
         Badgeville.client.get('/rewards.json')
       rescue Badgeville::Unprocessable => e
         e.response.should == response
+        p e.response.class
       end
     end
   end
