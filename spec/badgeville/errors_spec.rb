@@ -130,7 +130,6 @@ describe 'Badgeville Errors' do
         Badgeville.client.get('/rewards.json')
       rescue Badgeville::Unprocessable => e
         e.response.should == response
-        p e.response.class
       end
     end
   end
